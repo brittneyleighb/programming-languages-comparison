@@ -1,274 +1,296 @@
-# Comprehensive Programming Languages Comparison
-## Rust vs C++ vs C# vs Java - The Ultimate Developer's Guide
+# Programming Languages Comparison: The Ultimate Developer's Guide
+*Updated: 2025-09-23*
 
-### 🏗️ High-Level Overview
+This comparison is aimed at **beginners/intermediates choosing a first or next language for apps, web, or game dev** (not an exhaustive survey of all paradigms).  
+The focus: practical trade-offs, ecosystem fit, and when to pick which tool.
+
+---
+
+## How to Decide
+
+When choosing a language, ask what you care most about:
+- **Learning curve & docs** – How easy is it to start?  
+- **Runtime targets** – Native, JVM, browser, WASM?  
+- **Memory & safety model** – GC vs ownership/RAII.  
+- **Concurrency model** – Threads, async/await, actors, green threads.  
+- **Tooling & ecosystem** – Build systems, package managers, IDEs.  
+- **Interop** – How well does it talk to C, JVM, .NET, or Python?  
+- **Performance profile** – Footprint, latency, throughput.  
+- **Community & hiring signals** – Popularity as a weak tie-breaker.
+
+---
+
+## At-a-Glance Table
+
+| Language | Primary Targets     | Mem/Safety         | Concurrency              | Tooling         | Interop      | When to Pick / Gotchas |
+|---------:|---------------------|--------------------|--------------------------|-----------------|--------------|------------------------|
+| **C**    | Native, embedded    | Manual + UB risk   | pthreads                 | make/CMake      | C ABI        | Tiny footprint, FFI glue, engines<br>Error-prone manual memory |
+| **C++**  | Native, games       | RAII + UB risk     | std::thread, ASIO        | CMake/Conan     | C ABI        | Game engines, perf critical<br>Steep complexity, undefined behavior |
+| **Rust** | Native, WASM        | Ownership/borrow   | threads, async, actors   | Cargo           | C ABI        | Safety + perf, systems<br>Compile times, borrow-checker ramp |
+| **Java** | JVM, Android        | GC                 | threads, virtual threads | Gradle/Maven    | JVM ecosystem| Mature libs, Android, servers<br>Heavier footprint for small tools |
+| **Kotlin** | JVM, Multiplatform| GC                 | coroutines               | Gradle          | JVM/Native   | Modern Android/JVM<br>Smaller ecosystem than Java |
+| **C#**   | .NET, Windows       | GC                 | async/await, TPL         | MSBuild/NuGet   | .NET/P-Invoke| Enterprise, Unity, web<br>Microsoft ecosystem dependency |
+| **Python** | Scripts, ML, web  | GC                 | threads, asyncio         | pip/venv        | C FFI        | Fast prototyping, ML glue<br>Slow for compute-heavy workloads |
+| **JS/TS** | Browser, Node.js   | GC                 | event loop, Web Workers  | npm             | WASM, FFI    | Web front-end + full stack<br>Callback hell if not managed well |
+
+---
+
+## High-Level Philosophy Comparison
 
 Think of these languages like different construction approaches:
 
-- **C++**: Like a powerful but complex construction toolkit - you have complete control but need to manage every detail yourself
+- **C**: Like raw construction materials - maximum control but you build everything from scratch
+- **C++**: Like a powerful but complex construction toolkit - complete control but requires expertise to avoid accidents  
 - **Java**: Like building with standardized, pre-fabricated modules in a controlled environment (JVM)
-- **C#**: Similar to Java but with Microsoft's architectural standards and some additional modern tools
+- **C#**: Similar to Java but with Microsoft's architectural standards and additional modern tools
 - **Rust**: Like having an extremely thorough safety inspector who prevents construction errors before they happen
+- **Kotlin**: Like Java's modern renovation with better ergonomics
+- **Python**: Like having pre-made components for rapid assembly - great for prototyping but not always efficient
+- **JavaScript/TypeScript**: Like modular construction that works everywhere - from simple websites to complex applications
 
-## 📊 Language Comparison Matrix
+## Language Comparison Matrix
 
-| Feature | C++ | Java | C# | Rust |
-|---------|-----|------|----|----- |
-| **First Release** | 1985 | 1995 | 2000 | 2010 |
-| **Paradigm** | Multi-paradigm | OOP + Functional | OOP + Functional | Systems + Functional |
-| **Memory Management** | Manual (RAII) | Garbage Collection | Garbage Collection | Ownership System |
-| **Performance** | ⭐⭐⭐⭐⭐ | ⭐⭐⭐⭐ | ⭐⭐⭐⭐ | ⭐⭐⭐⭐⭐ |
-| **Memory Safety** | Manual | ⭐⭐⭐⭐ | ⭐⭐⭐⭐ | ⭐⭐⭐⭐⭐ |
-| **Learning Curve** | Very Steep | Moderate | Moderate | Steep |
-| **Compile Time** | Slow-Medium | Fast (JIT) | Fast (JIT) | Slow |
-| **Runtime Overhead** | None | JVM | .NET Runtime | None |
-| **Cross-Platform** | Yes (with effort) | Write once, run anywhere | Windows-focused (improving) | Excellent |
+| Feature | C | C++ | Java | C# | Rust | Kotlin | Python | JS/TS |
+|---------|---|-----|------|----|------|--------|--------|-------|
+| **First Release** | 1972 | 1985 | 1995 | 2000 | 2010 | 2011 | 1991 | 1995/2012 |
+| **Paradigm** | Procedural | Multi-paradigm | OOP + Functional | OOP + Functional | Systems + Functional | OOP + Functional | Multi-paradigm | Multi-paradigm |
+| **Memory Management** | Manual | Manual (RAII) | Garbage Collection | Garbage Collection | Ownership System | Garbage Collection | Garbage Collection | Garbage Collection |
+| **Performance** | Highest | Highest | High (JIT optimized) | High (JIT optimized) | Highest | High | Lower | Medium |
+| **Memory Safety** | Manual | Manual | Memory-safe | Memory-safe | Compile-time guarantees | Memory-safe | Memory-safe | Memory-safe |
+| **Learning Curve** | Moderate | Very Steep | Moderate | Moderate | Steep | Easy-Moderate | Easy | Easy-Moderate |
+| **Compile Time** | Fast | Slow-Medium | Fast (JIT) | Fast (JIT) | Slow | Fast | Interpreted | Fast (if TypeScript) |
+| **Runtime Overhead** | None | None | JVM | .NET Runtime | None | JVM/Native | Interpreter | V8/Node |
+| **Cross-Platform** | Yes | Yes (with effort) | Write once, run anywhere | Improving (was Windows-focused) | Excellent | Excellent | Excellent | Universal |
 
-## 📝 Comprehensive Syntax Comparison
+---
 
-### 1. Basic Data Types & Variables
+## Comprehensive Syntax Comparison
+
+### 1. Hello World
+
+```c
+// C
+#include <stdio.h>
+
+int main() {
+    printf("Hello, World!\n");
+    return 0;
+}
+```
 
 ```cpp
 // C++
-bool flag = true;
-char letter = 'A';
-int number = 42;
-long bigNumber = 1000000L;
-float decimal = 3.14f;
-double precision = 3.141592653589793;
-std::string text = "Hello";
-auto inferred = 42;  // Type inference
+#include <iostream>
 
-// Pointers and references
-int* ptr = &number;
-int& ref = number;
-
-// Constants
-const int CONSTANT = 100;
-constexpr int COMPILE_TIME = 42;
-```
-
-```java
-// Java
-boolean flag = true;
-char letter = 'A';
-byte smallInt = 127;
-short mediumInt = 32000;
-int number = 42;
-long bigNumber = 1000000L;
-float decimal = 3.14f;
-double precision = 3.141592653589793;
-String text = "Hello";  // Reference type
-var inferred = 42;  // Java 10+ type inference
-
-// All objects are references (no explicit pointers)
-Integer boxedInt = 42;  // Wrapper classes
-
-// Constants
-final int CONSTANT = 100;
-static final int CLASS_CONSTANT = 200;
-```
-
-```csharp
-// C#
-bool flag = true;
-char letter = 'A';
-byte smallInt = 255;
-short mediumInt = 32000;
-int number = 42;
-long bigNumber = 1000000L;
-float decimal = 3.14f;
-double precision = 3.141592653589793;
-decimal money = 99.99m;  // Financial precision
-string text = "Hello";
-var inferred = 42;  // Type inference
-
-// Nullable types
-int? nullableInt = null;
-string? nullableString = null;  // C# 8+
-
-// Constants
-const int CONSTANT = 100;
-static readonly int RUNTIME_CONSTANT = DateTime.Now.Year;
-```
-
-```rust
-// Rust
-let flag: bool = true;
-let letter: char = 'A';  // Unicode scalar
-let number: i32 = 42;    // Explicit signed 32-bit
-let big_number: i64 = 1_000_000;  // Underscores for readability
-let decimal: f32 = 3.14;
-let precision: f64 = 3.141592653589793;
-let text: &str = "Hello";  // String slice
-let owned_text: String = "Hello".to_string();
-
-// Mutability is explicit
-let mut mutable_number = 42;
-mutable_number += 1;
-
-// Type inference
-let inferred = 42;  // i32 by default
-
-// Constants
-const CONSTANT: i32 = 100;
-static GLOBAL_CONSTANT: i32 = 200;
-```
-
-### 2. Collections & Data Structures
-
-```cpp
-// C++
-#include <vector>
-#include <map>
-#include <unordered_map>
-#include <set>
-#include <array>
-
-// Dynamic arrays
-std::vector<int> numbers = {1, 2, 3, 4, 5};
-numbers.push_back(6);
-
-// Fixed-size arrays
-std::array<int, 5> fixedArray = {1, 2, 3, 4, 5};
-
-// Hash maps
-std::unordered_map<std::string, int> ages = {
-    {"Alice", 25},
-    {"Bob", 30}
-};
-
-// Sets
-std::set<std::string> uniqueNames = {"Alice", "Bob", "Charlie"};
-
-// Iterating
-for (const auto& item : numbers) {
-    std::cout << item << " ";
+int main() {
+    std::cout << "Hello, World!" << std::endl;
+    return 0;
 }
 ```
 
 ```java
 // Java
-import java.util.*;
-
-// Dynamic arrays
-List<Integer> numbers = new ArrayList<>(Arrays.asList(1, 2, 3, 4, 5));
-numbers.add(6);
-
-// Alternative with List.of (immutable)
-List<Integer> immutableList = List.of(1, 2, 3, 4, 5);
-
-// Hash maps
-Map<String, Integer> ages = new HashMap<>();
-ages.put("Alice", 25);
-ages.put("Bob", 30);
-
-// Or with Map.of
-Map<String, Integer> ages2 = Map.of("Alice", 25, "Bob", 30);
-
-// Sets
-Set<String> uniqueNames = new HashSet<>(Arrays.asList("Alice", "Bob"));
-
-// Iterating
-numbers.forEach(System.out::println);
-for (Integer number : numbers) {
-    System.out.println(number);
+public class HelloWorld {
+    public static void main(String[] args) {
+        System.out.println("Hello, World!");
+    }
 }
 ```
 
 ```csharp
 // C#
 using System;
-using System.Collections.Generic;
-using System.Linq;
 
-// Dynamic arrays
-List<int> numbers = new List<int> {1, 2, 3, 4, 5};
-numbers.Add(6);
-
-// Arrays
-int[] fixedArray = {1, 2, 3, 4, 5};
-
-// Dictionaries
-Dictionary<string, int> ages = new Dictionary<string, int>
-{
-    {"Alice", 25},
-    {"Bob", 30}
-};
-
-// Sets
-HashSet<string> uniqueNames = new HashSet<string> {"Alice", "Bob"};
-
-// LINQ operations
-var evenNumbers = numbers.Where(n => n % 2 == 0).ToList();
-
-// Iterating
-foreach (var number in numbers)
-{
-    Console.WriteLine(number);
+class Program {
+    static void Main() {
+        Console.WriteLine("Hello, World!");
+    }
 }
 ```
 
 ```rust
 // Rust
-use std::collections::{HashMap, HashSet, BTreeMap, VecDeque};
-
-// Dynamic arrays (vectors)
-let mut numbers = vec![1, 2, 3, 4, 5];
-numbers.push(6);
-
-// Fixed-size arrays
-let fixed_array: [i32; 5] = [1, 2, 3, 4, 5];
-
-// Hash maps
-let mut ages = HashMap::new();
-ages.insert("Alice".to_string(), 25);
-ages.insert("Bob".to_string(), 30);
-
-// Alternative initialization
-use std::collections::HashMap;
-let ages: HashMap<&str, i32> = [("Alice", 25), ("Bob", 30)]
-    .iter().cloned().collect();
-
-// Sets
-let mut unique_names = HashSet::new();
-unique_names.insert("Alice");
-unique_names.insert("Bob");
-
-// Iterating
-for number in &numbers {
-    println!("{}", number);
+fn main() {
+    println!("Hello, World!");
 }
-
-// Functional style
-let even_numbers: Vec<i32> = numbers.iter()
-    .filter(|&&n| n % 2 == 0)
-    .copied()
-    .collect();
 ```
 
-### 3. Functions & Methods
+```kotlin
+// Kotlin
+fun main() {
+    println("Hello, World!")
+}
+```
+
+```python
+# Python
+print("Hello, World!")
+```
+
+```javascript
+// JavaScript
+console.log("Hello, World!");
+
+// TypeScript
+const message: string = "Hello, World!";
+console.log(message);
+```
+
+### 2. Variable Declaration & Types
+
+```c
+// C
+int number = 42;
+float pi = 3.14f;
+char letter = 'A';
+char* text = "Hello";
+int* ptr = &number;
+
+// Arrays
+int array[5] = {1, 2, 3, 4, 5};
+```
 
 ```cpp
 // C++
-// Basic function
+int number = 42;
+float pi = 3.14f;
+char letter = 'A';
+std::string text = "Hello";
+auto inferred = 42;  // Type inference
+
+// Smart pointers
+std::unique_ptr<int> ptr = std::make_unique<int>(42);
+
+// Containers
+std::vector<int> vec = {1, 2, 3, 4, 5};
+```
+
+```java
+// Java
+int number = 42;
+float pi = 3.14f;
+char letter = 'A';
+String text = "Hello";
+var inferred = 42;  // Java 10+
+
+// Collections
+List<Integer> list = Arrays.asList(1, 2, 3, 4, 5);
+```
+
+```csharp
+// C#
+int number = 42;
+float pi = 3.14f;
+char letter = 'A';
+string text = "Hello";
+var inferred = 42;  // Type inference
+
+// Nullable types
+int? nullableInt = null;
+
+// Collections
+List<int> list = new List<int> {1, 2, 3, 4, 5};
+```
+
+```rust
+// Rust
+let number: i32 = 42;
+let pi: f32 = 3.14;
+let letter: char = 'A';
+let text: &str = "Hello";
+let owned_text: String = "Hello".to_string();
+
+// Mutability is explicit
+let mut mutable_number = 42;
+mutable_number += 1;
+
+// Collections
+let vec = vec![1, 2, 3, 4, 5];
+```
+
+```kotlin
+// Kotlin
+val number: Int = 42  // Immutable
+var mutableNumber = 42  // Mutable, type inferred
+val pi: Float = 3.14f
+val letter: Char = 'A'
+val text: String = "Hello"
+
+// Nullable types
+val nullableText: String? = null
+
+// Collections
+val list = listOf(1, 2, 3, 4, 5)
+val mutableList = mutableListOf(1, 2, 3, 4, 5)
+```
+
+```python
+# Python
+number = 42
+pi = 3.14
+letter = 'A'
+text = "Hello"
+
+# Dynamic typing
+x = 42      # int
+x = "Hello" # now string
+
+# Type hints (optional)
+def greet(name: str) -> str:
+    return f"Hello, {name}!"
+
+# Collections
+my_list = [1, 2, 3, 4, 5]
+my_dict = {"key": "value"}
+```
+
+```javascript
+// JavaScript
+let number = 42;
+const pi = 3.14;
+let letter = 'A';
+let text = "Hello";
+
+// Arrays and objects
+let array = [1, 2, 3, 4, 5];
+let object = { key: "value" };
+
+// TypeScript
+let typedNumber: number = 42;
+let typedText: string = "Hello";
+let nullableText: string | null = null;
+
+// Interfaces
+interface Person {
+    name: string;
+    age: number;
+}
+
+let person: Person = { name: "Alice", age: 30 };
+```
+
+### 3. Functions
+
+```c
+// C
 int add(int a, int b) {
     return a + b;
 }
 
-// Function with default parameters
-void greet(const std::string& name = "World") {
-    std::cout << "Hello, " << name << "!" << std::endl;
+// Function pointers
+int (*operation)(int, int) = add;
+int result = operation(5, 3);
+```
+
+```cpp
+// C++
+int add(int a, int b) {
+    return a + b;
 }
 
 // Function overloading
-int multiply(int a, int b) { return a * b; }
-double multiply(double a, double b) { return a * b; }
-
-// Template functions (generics)
-template<typename T>
-T maximum(T a, T b) {
-    return (a > b) ? a : b;
+double add(double a, double b) {
+    return a + b;
 }
 
 // Lambda expressions
@@ -276,129 +298,64 @@ auto lambda = [](int x, int y) -> int {
     return x + y;
 };
 
-// Function pointers
-int (*funcPtr)(int, int) = add;
-
-// Member functions
-class Calculator {
-public:
-    int add(int a, int b) const { return a + b; }
-    static int multiply(int a, int b) { return a * b; }
-};
+// Templates
+template<typename T>
+T maximum(T a, T b) {
+    return (a > b) ? a : b;
+}
 ```
 
 ```java
 // Java
-// Basic method
 public static int add(int a, int b) {
     return a + b;
 }
 
 // Method overloading
-public static int multiply(int a, int b) { return a * b; }
-public static double multiply(double a, double b) { return a * b; }
+public static double add(double a, double b) {
+    return a + b;
+}
+
+// Lambda expressions (Java 8+)
+BinaryOperator<Integer> adder = (x, y) -> x + y;
 
 // Generic methods
 public static <T extends Comparable<T>> T maximum(T a, T b) {
     return a.compareTo(b) > 0 ? a : b;
 }
-
-// Lambda expressions (Java 8+)
-BinaryOperator<Integer> adder = (x, y) -> x + y;
-Function<String, Integer> stringLength = String::length;
-
-// Method references
-List<String> names = Arrays.asList("Alice", "Bob", "Charlie");
-names.forEach(System.out::println);  // Method reference
-
-// Varargs
-public static void printAll(String... items) {
-    for (String item : items) {
-        System.out.println(item);
-    }
-}
-
-// Instance methods
-public class Calculator {
-    public int add(int a, int b) { return a + b; }
-    public static int multiply(int a, int b) { return a * b; }
-}
 ```
 
 ```csharp
 // C#
-// Basic method
 public static int Add(int a, int b) {
     return a + b;
 }
 
-// Method with default parameters
-public static void Greet(string name = "World") {
-    Console.WriteLine($"Hello, {name}!");
-}
-
 // Method overloading
-public static int Multiply(int a, int b) => a * b;
-public static double Multiply(double a, double b) => a * b;
+public static double Add(double a, double b) => a + b;
 
-// Generic methods with constraints
+// Lambda expressions
+Func<int, int, int> adder = (x, y) => x + y;
+
+// Generic methods
 public static T Maximum<T>(T a, T b) where T : IComparable<T> {
     return a.CompareTo(b) > 0 ? a : b;
-}
-
-// Lambda expressions and delegates
-Func<int, int, int> adder = (x, y) => x + y;
-Action<string> printer = Console.WriteLine;
-
-// Local functions (C# 7+)
-public static int ComplexCalculation(int x) {
-    int Helper(int n) => n * n;
-    return Helper(x) + Helper(x + 1);
-}
-
-// Extension methods
-public static class StringExtensions {
-    public static bool IsEmpty(this string str) => string.IsNullOrEmpty(str);
-}
-
-// Instance methods
-public class Calculator {
-    public int Add(int a, int b) => a + b;
-    public static int Multiply(int a, int b) => a * b;
 }
 ```
 
 ```rust
 // Rust
-// Basic function
 fn add(a: i32, b: i32) -> i32 {
     a + b  // No semicolon = return value
 }
 
-// Function with explicit return
-fn subtract(a: i32, b: i32) -> i32 {
-    return a - b;
-}
-
-// Generic functions with traits
+// Generic functions
 fn maximum<T: PartialOrd>(a: T, b: T) -> T {
     if a > b { a } else { b }
 }
 
-// Functions with multiple trait bounds
-fn print_and_compare<T>(a: T, b: T) 
-where 
-    T: std::fmt::Display + PartialOrd + Copy 
-{
-    println!("Comparing {} and {}", a, b);
-    if a > b {
-        println!("{} is greater", a);
-    }
-}
-
 // Closures
 let adder = |x, y| x + y;
-let multiplier = |x: i32| move |y: i32| x * y;
 
 // Higher-order functions
 fn apply_operation<F>(x: i32, y: i32, op: F) -> i32 
@@ -407,23 +364,113 @@ where
 {
     op(x, y)
 }
+```
 
-// Methods on structs
-struct Calculator;
+```kotlin
+// Kotlin
+fun add(a: Int, b: Int): Int {
+    return a + b
+}
 
-impl Calculator {
-    fn add(&self, a: i32, b: i32) -> i32 {
-        a + b
-    }
-    
-    // Associated function (like static method)
-    fn multiply(a: i32, b: i32) -> i32 {
-        a * b
-    }
+// Single expression functions
+fun addShort(a: Int, b: Int) = a + b
+
+// Lambda expressions
+val adder = { x: Int, y: Int -> x + y }
+
+// Generic functions
+fun <T : Comparable<T>> maximum(a: T, b: T): T {
+    return if (a > b) a else b
+}
+
+// Extension functions
+fun String.isPalindrome(): Boolean {
+    return this == this.reversed()
+}
+```
+
+```python
+# Python
+def add(a, b):
+    return a + b
+
+# Default parameters
+def greet(name, greeting="Hello"):
+    return f"{greeting}, {name}!"
+
+# Lambda expressions
+adder = lambda x, y: x + y
+
+# Type hints
+def maximum(a: int, b: int) -> int:
+    return max(a, b)
+
+# Decorators
+def timer(func):
+    def wrapper(*args, **kwargs):
+        # Timing logic
+        return func(*args, **kwargs)
+    return wrapper
+
+@timer
+def slow_function():
+    pass
+```
+
+```javascript
+// JavaScript
+function add(a, b) {
+    return a + b;
+}
+
+// Arrow functions
+const addArrow = (a, b) => a + b;
+
+// Default parameters
+function greet(name, greeting = "Hello") {
+    return `${greeting}, ${name}!`;
+}
+
+// Higher-order functions
+const numbers = [1, 2, 3, 4, 5];
+const doubled = numbers.map(x => x * 2);
+
+// TypeScript
+function addTyped(a: number, b: number): number {
+    return a + b;
+}
+
+// Generic functions
+function maximum<T>(a: T, b: T, compare: (x: T, y: T) => number): T {
+    return compare(a, b) > 0 ? a : b;
 }
 ```
 
 ### 4. Object-Oriented Programming
+
+```c
+// C - No built-in OOP, but can simulate with structs and function pointers
+typedef struct {
+    int x, y;
+} Point;
+
+typedef struct {
+    Point* (*create)(int x, int y);
+    void (*destroy)(Point* p);
+    double (*distance)(Point* a, Point* b);
+} PointVTable;
+
+Point* point_create(int x, int y) {
+    Point* p = malloc(sizeof(Point));
+    p->x = x;
+    p->y = y;
+    return p;
+}
+
+void point_destroy(Point* p) {
+    free(p);
+}
+```
 
 ```cpp
 // C++
@@ -431,126 +478,47 @@ class Animal {
 private:
     std::string name;
     
-protected:
-    int age;
-    
 public:
-    // Constructor
-    Animal(const std::string& n, int a) : name(n), age(a) {}
-    
-    // Copy constructor
-    Animal(const Animal& other) : name(other.name), age(other.age) {}
-    
-    // Move constructor
-    Animal(Animal&& other) noexcept 
-        : name(std::move(other.name)), age(other.age) {}
-    
-    // Virtual destructor
+    Animal(const std::string& n) : name(n) {}
     virtual ~Animal() = default;
     
-    // Pure virtual function (abstract)
-    virtual void makeSound() = 0;
+    virtual void makeSound() = 0;  // Pure virtual
     
-    // Virtual function
-    virtual void move() {
-        std::cout << name << " is moving" << std::endl;
-    }
-    
-    // Getter
     const std::string& getName() const { return name; }
-    
-    // Operator overloading
-    bool operator==(const Animal& other) const {
-        return name == other.name && age == other.age;
-    }
 };
 
 class Dog : public Animal {
 public:
-    Dog(const std::string& name, int age) : Animal(name, age) {}
+    Dog(const std::string& name) : Animal(name) {}
     
     void makeSound() override {
         std::cout << getName() << " says Woof!" << std::endl;
-    }
-    
-    // Method overriding
-    void move() override {
-        std::cout << getName() << " runs on four legs" << std::endl;
-    }
-};
-
-// Multiple inheritance
-class Flyable {
-public:
-    virtual void fly() = 0;
-};
-
-class Bird : public Animal, public Flyable {
-public:
-    Bird(const std::string& name, int age) : Animal(name, age) {}
-    
-    void makeSound() override {
-        std::cout << getName() << " chirps" << std::endl;
-    }
-    
-    void fly() override {
-        std::cout << getName() << " is flying" << std::endl;
     }
 };
 ```
 
 ```java
 // Java
-// Abstract class
 public abstract class Animal {
     private String name;
-    protected int age;
     
-    // Constructor
-    public Animal(String name, int age) {
+    public Animal(String name) {
         this.name = name;
-        this.age = age;
     }
     
-    // Abstract method
     public abstract void makeSound();
     
-    // Concrete method
-    public void move() {
-        System.out.println(name + " is moving");
-    }
-    
-    // Getter
     public String getName() { return name; }
-    
-    // Override Object methods
-    @Override
-    public boolean equals(Object obj) {
-        if (this == obj) return true;
-        if (obj == null || getClass() != obj.getClass()) return false;
-        Animal animal = (Animal) obj;
-        return age == animal.age && Objects.equals(name, animal.name);
-    }
-    
-    @Override
-    public int hashCode() {
-        return Objects.hash(name, age);
-    }
 }
 
 public class Dog extends Animal {
-    public Dog(String name, int age) {
-        super(name, age);
+    public Dog(String name) {
+        super(name);
     }
     
     @Override
     public void makeSound() {
         System.out.println(getName() + " says Woof!");
-    }
-    
-    @Override
-    public void move() {
-        System.out.println(getName() + " runs on four legs");
     }
 }
 
@@ -558,82 +526,31 @@ public class Dog extends Animal {
 public interface Flyable {
     void fly();
     
-    // Default method (Java 8+)
-    default void land() {
+    default void land() {  // Java 8+
         System.out.println("Landing...");
-    }
-}
-
-// Multiple interface implementation
-public class Bird extends Animal implements Flyable {
-    public Bird(String name, int age) {
-        super(name, age);
-    }
-    
-    @Override
-    public void makeSound() {
-        System.out.println(getName() + " chirps");
-    }
-    
-    @Override
-    public void fly() {
-        System.out.println(getName() + " is flying");
-    }
-}
-
-// Records (Java 14+) - immutable data classes
-public record Person(String name, int age) {
-    // Compact constructor
-    public Person {
-        if (age < 0) throw new IllegalArgumentException("Age cannot be negative");
     }
 }
 ```
 
 ```csharp
 // C#
-// Abstract class
 public abstract class Animal {
     private string name;
-    protected int age;
     
-    // Constructor
-    public Animal(string name, int age) {
+    public Animal(string name) {
         this.name = name;
-        this.age = age;
     }
     
-    // Properties (C# style getters/setters)
-    public string Name { get; private set; } = "";
-    public int Age { get; protected set; }
+    public string Name => name;  // Property
     
-    // Abstract method
     public abstract void MakeSound();
-    
-    // Virtual method
-    public virtual void Move() {
-        Console.WriteLine($"{Name} is moving");
-    }
-    
-    // Override Object methods
-    public override bool Equals(object? obj) {
-        return obj is Animal animal && Name == animal.Name && Age == animal.Age;
-    }
-    
-    public override int GetHashCode() {
-        return HashCode.Combine(Name, Age);
-    }
 }
 
 public class Dog : Animal {
-    public Dog(string name, int age) : base(name, age) { }
+    public Dog(string name) : base(name) { }
     
     public override void MakeSound() {
         Console.WriteLine($"{Name} says Woof!");
-    }
-    
-    public override void Move() {
-        Console.WriteLine($"{Name} runs on four legs");
     }
 }
 
@@ -641,86 +558,41 @@ public class Dog : Animal {
 public interface IFlyable {
     void Fly();
     
-    // Default interface method (C# 8+)
-    void Land() => Console.WriteLine("Landing...");
+    void Land() => Console.WriteLine("Landing...");  // C# 8+
 }
 
-// Multiple interface implementation
-public class Bird : Animal, IFlyable {
-    public Bird(string name, int age) : base(name, age) { }
-    
-    public override void MakeSound() {
-        Console.WriteLine($"{Name} chirps");
-    }
-    
-    public void Fly() {
-        Console.WriteLine($"{Name} is flying");
-    }
-}
-
-// Records (C# 9+) - immutable reference types
+// Records (C# 9+)
 public record Person(string Name, int Age);
-
-// Record with validation
-public record PersonWithValidation(string Name, int Age) {
-    public PersonWithValidation(string Name, int Age) : this(Name, Age) {
-        if (Age < 0) throw new ArgumentException("Age cannot be negative");
-    }
-}
-
-// Structs (value types)
-public struct Point {
-    public int X { get; init; }
-    public int Y { get; init; }
-    
-    public Point(int x, int y) => (X, Y) = (x, y);
-}
 ```
 
 ```rust
-// Rust - No traditional inheritance, uses composition and traits
-// Struct definition
+// Rust - No inheritance, uses composition and traits
 struct Animal {
     name: String,
-    age: i32,
 }
 
 impl Animal {
-    fn new(name: String, age: i32) -> Self {
-        Animal { name, age }
+    fn new(name: String) -> Self {
+        Animal { name }
     }
     
     fn get_name(&self) -> &str {
         &self.name
     }
-    
-    fn move_animal(&self) {
-        println!("{} is moving", self.name);
-    }
 }
 
-// Traits (similar to interfaces)
 trait MakeSound {
     fn make_sound(&self);
 }
 
-trait Flyable {
-    fn fly(&self);
-    
-    // Default implementation
-    fn land(&self) {
-        println!("Landing...");
-    }
-}
-
 struct Dog {
-    animal: Animal,  // Composition over inheritance
+    animal: Animal,
 }
 
 impl Dog {
-    fn new(name: String, age: i32) -> Self {
+    fn new(name: String) -> Self {
         Dog {
-            animal: Animal::new(name, age),
+            animal: Animal::new(name),
         }
     }
 }
@@ -731,136 +603,189 @@ impl MakeSound for Dog {
     }
 }
 
-// Deref trait for transparent field access
-use std::ops::Deref;
-
-impl Deref for Dog {
-    type Target = Animal;
-    
-    fn deref(&self) -> &Self::Target {
-        &self.animal
-    }
-}
-
-struct Bird {
-    animal: Animal,
-}
-
-impl Bird {
-    fn new(name: String, age: i32) -> Self {
-        Bird {
-            animal: Animal::new(name, age),
-        }
-    }
-}
-
-impl MakeSound for Bird {
-    fn make_sound(&self) {
-        println!("{} chirps", self.animal.get_name());
-    }
-}
-
-impl Flyable for Bird {
-    fn fly(&self) {
-        println!("{} is flying", self.animal.get_name());
-    }
-}
-
 // Enums with data (algebraic data types)
 enum AnimalType {
     Dog { name: String, breed: String },
     Bird { name: String, wingspan: f64 },
-    Fish { name: String, water_type: WaterType },
+}
+```
+
+```kotlin
+// Kotlin
+abstract class Animal(val name: String) {
+    abstract fun makeSound()
 }
 
-enum WaterType {
-    Fresh,
-    Salt,
+class Dog(name: String) : Animal(name) {
+    override fun makeSound() {
+        println("$name says Woof!")
+    }
 }
 
-// Pattern matching on enums
-impl AnimalType {
-    fn describe(&self) -> String {
-        match self {
-            AnimalType::Dog { name, breed } => {
-                format!("{} is a {} dog", name, breed)
-            }
-            AnimalType::Bird { name, wingspan } => {
-                format!("{} is a bird with {:.1}m wingspan", name, wingspan)
-            }
-            AnimalType::Fish { name, water_type } => {
-                let water = match water_type {
-                    WaterType::Fresh => "freshwater",
-                    WaterType::Salt => "saltwater",
-                };
-                format!("{} is a {} fish", name, water)
-            }
-        }
+// Interface
+interface Flyable {
+    fun fly()
+    
+    fun land() {  // Default implementation
+        println("Landing...")
+    }
+}
+
+// Data classes
+data class Person(val name: String, val age: Int)
+
+// Sealed classes (like Rust enums)
+sealed class Result<out T> {
+    data class Success<T>(val data: T) : Result<T>()
+    data class Error(val message: String) : Result<Nothing>()
+}
+```
+
+```python
+# Python
+class Animal:
+    def __init__(self, name):
+        self._name = name  # Convention: _ for private
+    
+    @property
+    def name(self):
+        return self._name
+    
+    def make_sound(self):
+        raise NotImplementedError("Subclasses must implement make_sound")
+
+class Dog(Animal):
+    def make_sound(self):
+        print(f"{self.name} says Woof!")
+
+# Multiple inheritance
+class Flyable:
+    def fly(self):
+        print("Flying...")
+
+class Bird(Animal, Flyable):
+    def make_sound(self):
+        print(f"{self.name} chirps")
+
+# Dataclasses (Python 3.7+)
+from dataclasses import dataclass
+
+@dataclass
+class Person:
+    name: str
+    age: int
+```
+
+```javascript
+// JavaScript
+class Animal {
+    constructor(name) {
+        this._name = name;
+    }
+    
+    get name() {
+        return this._name;
+    }
+    
+    makeSound() {
+        throw new Error("Subclasses must implement makeSound");
+    }
+}
+
+class Dog extends Animal {
+    makeSound() {
+        console.log(`${this.name} says Woof!`);
+    }
+}
+
+// TypeScript
+abstract class AnimalTS {
+    constructor(protected name: string) {}
+    
+    abstract makeSound(): void;
+    
+    getName(): string {
+        return this.name;
+    }
+}
+
+class DogTS extends AnimalTS {
+    makeSound(): void {
+        console.log(`${this.name} says Woof!`);
+    }
+}
+
+// Interface
+interface Flyable {
+    fly(): void;
+}
+
+class Bird extends AnimalTS implements Flyable {
+    makeSound(): void {
+        console.log(`${this.name} chirps`);
+    }
+    
+    fly(): void {
+        console.log(`${this.name} is flying`);
     }
 }
 ```
 
 ### 5. Error Handling
 
-```cpp
-// C++ - Multiple approaches
+```c
+// C - Return codes and errno
+#include <errno.h>
 
-// 1. Exceptions (traditional)
-#include <stdexcept>
-#include <iostream>
-
-void riskyFunction() {
-    throw std::runtime_error("Something went wrong!");
+int divide(int a, int b, int* result) {
+    if (b == 0) {
+        errno = EINVAL;
+        return -1;  // Error
+    }
+    *result = a / b;
+    return 0;  // Success
 }
 
-void exceptionExample() {
-    try {
-        riskyFunction();
-    } catch (const std::runtime_error& e) {
-        std::cerr << "Error: " << e.what() << std::endl;
-    } catch (...) {
-        std::cerr << "Unknown error occurred" << std::endl;
+// Usage
+int result;
+if (divide(10, 0, &result) != 0) {
+    printf("Error: %s\n", strerror(errno));
+}
+```
+
+```cpp
+// C++ - Multiple approaches
+// 1. Exceptions
+#include <stdexcept>
+
+int divide(int a, int b) {
+    if (b == 0) {
+        throw std::invalid_argument("Division by zero");
     }
+    return a / b;
 }
 
 // 2. Optional (C++17)
 #include <optional>
 
-std::optional<int> divide(int a, int b) {
+std::optional<int> safe_divide(int a, int b) {
     if (b == 0) return std::nullopt;
     return a / b;
 }
 
-void optionalExample() {
-    auto result = divide(10, 0);
-    if (result.has_value()) {
-        std::cout << "Result: " << result.value() << std::endl;
-    } else {
-        std::cout << "Division by zero!" << std::endl;
-    }
-}
-
-// 3. Expected (C++23 or library implementation)
-#include <expected>  // C++23
-
-std::expected<int, std::string> betterDivide(int a, int b) {
+// 3. Expected (C++23)
+std::expected<int, std::string> better_divide(int a, int b) {
     if (b == 0) return std::unexpected("Division by zero");
     return a / b;
 }
 ```
 
 ```java
-// Java - Exceptions with checked/unchecked distinction
-
-import java.io.*;
-import java.util.Optional;
-
+// Java - Checked and unchecked exceptions
 public class ErrorHandling {
-    // Checked exception - must be declared or handled
+    // Checked exception - must be declared
     public static String readFile(String filename) throws IOException {
-        try (BufferedReader reader = new BufferedReader(new FileReader(filename))) {
-            return reader.readLine();
-        }
+        return Files.readString(Paths.get(filename));
     }
     
     // Unchecked exception
@@ -869,73 +794,49 @@ public class ErrorHandling {
         return a / b;
     }
     
-    // Optional pattern (Java 8+)
+    // Optional pattern
     public static Optional<Integer> safeDivide(int a, int b) {
         if (b == 0) return Optional.empty();
         return Optional.of(a / b);
     }
     
+    // Usage
     public static void handleErrors() {
-        // Try-catch with resources
-        try (FileWriter writer = new FileWriter("output.txt")) {
-            writer.write("Hello World");
+        try {
+            readFile("nonexistent.txt");
         } catch (IOException e) {
             System.err.println("File error: " + e.getMessage());
         }
         
-        // Optional handling
-        safeDivide(10, 0)
-            .ifPresentOrElse(
-                result -> System.out.println("Result: " + result),
-                () -> System.out.println("Cannot divide by zero")
-            );
-    }
-    
-    // Custom exceptions
-    static class CustomException extends Exception {
-        public CustomException(String message, Throwable cause) {
-            super(message, cause);
-        }
+        safeDivide(10, 0).ifPresentOrElse(
+            result -> System.out.println("Result: " + result),
+            () -> System.out.println("Cannot divide by zero")
+        );
     }
 }
 ```
 
 ```csharp
-// C# - Similar to Java but with some differences
-
-using System;
-using System.IO;
-
+// C# - Exceptions with some nullable patterns
 public class ErrorHandling {
-    // All exceptions are unchecked in C#
     public static string ReadFile(string filename) {
-        using (var reader = new StreamReader(filename)) {
-            return reader.ReadLine() ?? "";
-        }
+        return File.ReadAllText(filename);  // Can throw IOException
     }
     
     public static int Divide(int a, int b) {
-        if (b == 0) throw new DivideByZeroException("Cannot divide by zero");
+        if (b == 0) throw new DivideByZeroException();
         return a / b;
     }
     
-    // Nullable reference types (C# 8+) and nullable value types
     public static int? SafeDivide(int a, int b) {
         if (b == 0) return null;
         return a / b;
     }
     
-    // Result pattern (not built-in, but common)
-    public static Result<int, string> BetterDivide(int a, int b) {
-        if (b == 0) return Result<int, string>.Error("Division by zero");
-        return Result<int, string>.Success(a / b);
-    }
-    
+    // Pattern matching (C# 8+)
     public static void HandleErrors() {
-        // Try-catch-finally
         try {
-            var result = ReadFile("nonexistent.txt");
-            Console.WriteLine(result);
+            ReadFile("nonexistent.txt");
         }
         catch (FileNotFoundException ex) {
             Console.WriteLine($"File not found: {ex.FileName}");
@@ -943,70 +844,25 @@ public class ErrorHandling {
         catch (IOException ex) {
             Console.WriteLine($"IO Error: {ex.Message}");
         }
-        finally {
-            Console.WriteLine("Cleanup code here");
-        }
         
-        // Nullable handling
-        var divisionResult = SafeDivide(10, 0);
-        if (divisionResult.HasValue) {
-            Console.WriteLine($"Result: {divisionResult.Value}");
-        } else {
-            Console.WriteLine("Cannot divide by zero");
-        }
-        
-        // Pattern matching with switch expressions (C# 8+)
-        var message = divisionResult switch {
-            null => "Division by zero occurred",
-            var result when result < 0 => "Negative result",
-            var result => $"Positive result: {result}"
+        var result = SafeDivide(10, 0);
+        var message = result switch {
+            null => "Division by zero",
+            var value => $"Result: {value}"
         };
+        Console.WriteLine(message);
     }
-}
-
-// Custom Result type
-public class Result<T, E> {
-    private readonly T? _value;
-    private readonly E? _error;
-    private readonly bool _isSuccess;
-    
-    private Result(T value) {
-        _value = value;
-        _isSuccess = true;
-    }
-    
-    private Result(E error) {
-        _error = error;
-        _isSuccess = false;
-    }
-    
-    public static Result<T, E> Success(T value) => new(value);
-    public static Result<T, E> Error(E error) => new(error);
-    
-    public bool IsSuccess => _isSuccess;
-    public T Value => _isSuccess ? _value! : throw new InvalidOperationException();
-    public E Error => !_isSuccess ? _error! : throw new InvalidOperationException();
 }
 ```
 
 ```rust
 // Rust - Result type and panic! (no exceptions)
-
-use std::fs;
-use std::io;
-
-// Result type for recoverable errors
 fn divide(a: i32, b: i32) -> Result<i32, String> {
     if b == 0 {
         Err("Division by zero".to_string())
     } else {
         Ok(a / b)
     }
-}
-
-// Using standard library errors
-fn read_file(filename: &str) -> Result<String, io::Error> {
-    fs::read_to_string(filename)
 }
 
 // Custom error types
@@ -1035,86 +891,229 @@ fn safe_divide(a: f64, b: f64) -> Result<f64, MathError> {
     }
 }
 
-fn safe_sqrt(x: f64) -> Result<f64, MathError> {
-    if x < 0.0 {
-        Err(MathError::NegativeSquareRoot)
-    } else {
-        Ok(x.sqrt())
-    }
-    
-}
-
 // Chaining operations with ?
 fn complex_calculation(a: f64, b: f64) -> Result<f64, MathError> {
     let division = safe_divide(a, b)?;  // Early return if error
-    let sqrt_result = safe_sqrt(division)?;
-    Ok(sqrt_result * 2.0)
+    Ok(division * 2.0)
 }
 
+// Pattern matching
 fn handle_errors() {
-    // Pattern matching on Result
     match divide(10, 0) {
         Ok(result) => println!("Result: {}", result),
         Err(error) => println!("Error: {}", error),
     }
     
-    // Using ? operator for early returns
-    let file_content = read_file("example.txt")
-        .unwrap_or_else(|error| format!("Error reading file: {}", error));
-    
-    // unwrap() and expect() for panicking on errors
-    let risky_result = divide(10, 2).unwrap();  // Panics if Err
-    let safer_result = divide(10, 2).expect("Division should work");
-    
-    // Combining Results
-    let results: Result<Vec<_>, _> = (0..5)
-        .map(|i| divide(100, i))
-        .collect();
-    
-    match results {
-        Ok(values) => println!("All succeeded: {:?}", values),
-        Err(error) => println!("At least one failed: {}", error),
-    }
-    
-    // Option type for absence of value
-    let numbers = vec![1, 2, 3, 4, 5];
-    let first = numbers.first();  // Returns Option<&i32>
-    
-    match first {
-        Some(value) => println!("First element: {}", value),
-        None => println!("Vector is empty"),
-    }
-    
-    // Chaining Options and Results
-    let result = numbers
-        .first()                    // Option<&i32>
-        .map(|&x| x * 2)           // Option<i32>
-        .filter(|&x| x > 0)        // Option<i32>
-        .ok_or("No valid value")    // Result<i32, &str>
-        .and_then(|x| divide(x, 2));  // Result<i32, String>
+    // Unwrap variants
+    let result = divide(10, 2).unwrap_or(0);  // Use 0 if error
+    let result = divide(10, 2).expect("Division should work");  // Panic with message
+}
+```
+
+```kotlin
+// Kotlin - Exceptions + nullable types
+fun divide(a: Int, b: Int): Int {
+    if (b == 0) throw ArithmeticException("Division by zero")
+    return a / b
 }
 
-// panic! for unrecoverable errors
-fn will_panic() {
-    panic!("This is an unrecoverable error!");
+fun safeDivide(a: Int, b: Int): Int? {
+    return if (b == 0) null else a / b
 }
 
-// Using panic for debugging
-fn debug_function(value: Option<i32>) {
-    let x = value.unwrap();  // Will panic if None
-    println!("Value is: {}", x);
+// Result-like sealed class
+sealed class Result<out T> {
+    data class Success<T>(val data: T) : Result<T>()
+    data class Error(val message: String) : Result<Nothing>()
+}
+
+fun betterDivide(a: Int, b: Int): Result<Int> {
+    return if (b == 0) {
+        Result.Error("Division by zero")
+    } else {
+        Result.Success(a / b)
+    }
+}
+
+// Usage
+fun handleErrors() {
+    try {
+        divide(10, 0)
+    } catch (e: ArithmeticException) {
+        println("Error: ${e.message}")
+    }
+    
+    val result = safeDivide(10, 0)
+    when (result) {
+        null -> println("Division by zero")
+        else -> println("Result: $result")
+    }
+    
+    when (val divResult = betterDivide(10, 0)) {
+        is Result.Success -> println("Result: ${divResult.data}")
+        is Result.Error -> println("Error: ${divResult.message}")
+    }
+}
+```
+
+```python
+# Python - Exceptions with optional type hints
+def divide(a, b):
+    if b == 0:
+        raise ValueError("Division by zero")
+    return a / b
+
+def safe_divide(a, b):
+    try:
+        return a / b
+    except ZeroDivisionError:
+        return None
+
+# Type hints
+from typing import Optional, Union
+
+def typed_divide(a: int, b: int) -> Optional[int]:
+    if b == 0:
+        return None
+    return a // b
+
+# Custom exceptions
+class MathError(Exception):
+    pass
+
+class DivisionByZeroError(MathError):
+    def __init__(self, message="Division by zero"):
+        self.message = message
+        super().__init__(self.message)
+
+# Usage
+def handle_errors():
+    try:
+        result = divide(10, 0)
+    except ValueError as e:
+        print(f"Error: {e}")
+    
+    result = safe_divide(10, 0)
+    if result is not None:
+        print(f"Result: {result}")
+    else:
+        print("Division by zero")
+    
+    # Context managers for resource handling
+    try:
+        with open("file.txt", "r") as f:
+            content = f.read()
+    except FileNotFoundError:
+        print("File not found")
+```
+
+```javascript
+// JavaScript - Exceptions and Promise-based error handling
+function divide(a, b) {
+    if (b === 0) {
+        throw new Error("Division by zero");
+    }
+    return a / b;
+}
+
+function safeDivide(a, b) {
+    try {
+        return divide(a, b);
+    } catch (error) {
+        return null;
+    }
+}
+
+// Promise-based error handling
+function asyncDivide(a, b) {
+    return new Promise((resolve, reject) => {
+        if (b === 0) {
+            reject(new Error("Division by zero"));
+        } else {
+            resolve(a / b);
+        }
+    });
+}
+
+// async/await
+async function handleAsync() {
+    try {
+        const result = await asyncDivide(10, 0);
+        console.log("Result:", result);
+    } catch (error) {
+        console.error("Error:", error.message);
+    }
+}
+
+// TypeScript - Better type safety
+type Result<T, E = Error> = 
+    | { success: true; data: T }
+    | { success: false; error: E };
+
+function betterDivide(a: number, b: number): Result<number> {
+    if (b === 0) {
+        return { success: false, error: new Error("Division by zero") };
+    }
+    return { success: true, data: a / b };
+}
+
+// Usage
+function handleErrors() {
+    const result = betterDivide(10, 0);
+    if (result.success) {
+        console.log("Result:", result.data);
+    } else {
+        console.error("Error:", result.error.message);
+    }
 }
 ```
 
 ### 6. Concurrency & Parallelism
+
+```c
+// C - pthreads
+#include <pthread.h>
+#include <stdio.h>
+
+void* worker_function(void* arg) {
+    int* id = (int*)arg;
+    printf("Worker %d is running\n", *id);
+    return NULL;
+}
+
+int main() {
+    pthread_t threads[4];
+    int thread_ids[4];
+    
+    for (int i = 0; i < 4; i++) {
+        thread_ids[i] = i;
+        pthread_create(&threads[i], NULL, worker_function, &thread_ids[i]);
+    }
+    
+    for (int i = 0; i < 4; i++) {
+        pthread_join(threads[i], NULL);
+    }
+    
+    return 0;
+}
+
+// Mutex for synchronization
+pthread_mutex_t mutex = PTHREAD_MUTEX_INITIALIZER;
+int shared_counter = 0;
+
+void* increment_counter(void* arg) {
+    pthread_mutex_lock(&mutex);
+    shared_counter++;
+    pthread_mutex_unlock(&mutex);
+    return NULL;
+}
+```
 
 ```cpp
 // C++
 #include <thread>
 #include <mutex>
 #include <future>
-#include <atomic>
-#include <condition_variable>
 
 class ThreadSafeCounter {
     std::mutex mutex_;
@@ -1132,23 +1131,14 @@ public:
     }
 };
 
-// Thread creation
-void workerFunction(int id) {
-    std::cout << "Worker " << id << " is running\n";
-}
-
-void threadExample() {
+void concurrency_example() {
     // Basic thread
-    std::thread worker(workerFunction, 1);
+    std::thread worker([]() {
+        std::cout << "Worker thread running\n";
+    });
     worker.join();
     
-    // Lambda with thread
-    std::thread lambda_thread([]() {
-        std::cout << "Lambda thread running\n";
-    });
-    lambda_thread.join();
-    
-    // Futures and promises
+    // Futures and async
     auto future = std::async(std::launch::async, []() {
         std::this_thread::sleep_for(std::chrono::seconds(1));
         return 42;
@@ -1156,80 +1146,15 @@ void threadExample() {
     
     int result = future.get();  // Blocks until ready
 }
-
-// Atomic operations
-std::atomic<int> atomicCounter{0};
-
-void atomicExample() {
-    std::vector<std::thread> threads;
-    
-    for (int i = 0; i < 10; ++i) {
-        threads.emplace_back([]() {
-            for (int j = 0; j < 1000; ++j) {
-                atomicCounter.fetch_add(1);
-            }
-        });
-    }
-    
-    for (auto& t : threads) {
-        t.join();
-    }
-    
-    std::cout << "Final count: " << atomicCounter.load() << std::endl;
-}
 ```
 
 ```java
 // Java
 import java.util.concurrent.*;
-import java.util.concurrent.atomic.AtomicInteger;
 
 public class ConcurrencyExample {
     
-    // Thread-safe counter
-    private static class ThreadSafeCounter {
-        private int count = 0;
-        
-        public synchronized void increment() {
-            count++;
-        }
-        
-        public synchronized int get() {
-            return count;
-        }
-    }
-    
-    // Runnable interface
-    static class Worker implements Runnable {
-        private final int id;
-        
-        public Worker(int id) { this.id = id; }
-        
-        @Override
-        public void run() {
-            System.out.println("Worker " + id + " is running");
-        }
-    }
-    
-    public static void threadExample() {
-        // Basic thread
-        Thread worker = new Thread(new Worker(1));
-        worker.start();
-        
-        try {
-            worker.join();
-        } catch (InterruptedException e) {
-            Thread.currentThread().interrupt();
-        }
-        
-        // Lambda with thread
-        Thread lambdaThread = new Thread(() -> {
-            System.out.println("Lambda thread running");
-        });
-        lambdaThread.start();
-    }
-    
-    // Executor service
+    // ExecutorService
     public static void executorExample() {
         ExecutorService executor = Executors.newFixedThreadPool(4);
         
@@ -1264,24 +1189,16 @@ public class ConcurrencyExample {
         }
     }
     
-    // Atomic operations
-    private static final AtomicInteger atomicCounter = new AtomicInteger(0);
-    
-    public static void atomicExample() throws InterruptedException {
-        ExecutorService executor = Executors.newFixedThreadPool(10);
-        
-        for (int i = 0; i < 10; i++) {
-            executor.submit(() -> {
-                for (int j = 0; j < 1000; j++) {
-                    atomicCounter.incrementAndGet();
-                }
-            });
+    // Virtual Threads (Java 19+)
+    public static void virtualThreadsExample() {
+        try (var executor = Executors.newVirtualThreadPerTaskExecutor()) {
+            for (int i = 0; i < 1000; i++) {
+                executor.submit(() -> {
+                    // Lightweight thread
+                    System.out.println("Virtual thread: " + Thread.currentThread());
+                });
+            }
         }
-        
-        executor.shutdown();
-        executor.awaitTermination(5, TimeUnit.SECONDS);
-        
-        System.out.println("Final count: " + atomicCounter.get());
     }
 }
 ```
@@ -1293,34 +1210,6 @@ using System.Threading;
 using System.Threading.Tasks;
 
 public class ConcurrencyExample {
-    
-    // Thread-safe counter
-    private class ThreadSafeCounter {
-        private int count = 0;
-        private readonly object lockObject = new object();
-        
-        public void Increment() {
-            lock (lockObject) {
-                count++;
-            }
-        }
-        
-        public int Get() {
-            lock (lockObject) {
-                return count;
-            }
-        }
-    }
-    
-    // Basic threading
-    public static void ThreadExample() {
-        // Thread with method
-        var worker = new Thread(() => {
-            Console.WriteLine("Worker thread is running");
-        });
-        worker.Start();
-        worker.Join();
-    }
     
     // Task-based programming (preferred)
     public static async Task TaskExample() {
@@ -1347,11 +1236,7 @@ public class ConcurrencyExample {
     }
     
     public static async Task AsyncExample() {
-        // Sequential
-        string data1 = await FetchDataAsync();
-        string data2 = await FetchDataAsync();
-        
-        // Parallel
+        // Parallel execution
         Task<string> task1 = FetchDataAsync();
         Task<string> task2 = FetchDataAsync();
         
@@ -1371,84 +1256,25 @@ public class ConcurrencyExample {
             
         Console.WriteLine($"Result: {result}");
     }
-    
-    // Cancellation
-    public static async Task CancellationExample() {
-        using var cts = new CancellationTokenSource();
-        
-        // Cancel after 2 seconds
-        cts.CancelAfter(TimeSpan.FromSeconds(2));
-        
-        try {
-            await LongRunningTask(cts.Token);
-        } catch (OperationCanceledException) {
-            Console.WriteLine("Task was cancelled");
-        }
-    }
-    
-    private static async Task LongRunningTask(CancellationToken token) {
-        for (int i = 0; i < 100; i++) {
-            token.ThrowIfCancellationRequested();
-            await Task.Delay(100, token);
-            Console.WriteLine($"Progress: {i}%");
-        }
-    }
 }
 ```
 
 ```rust
 // Rust
-use std::sync::{Arc, Mutex, mpsc};
+use std::sync::{Arc, Mutex};
 use std::thread;
-use std::time::Duration;
-use tokio; // For async/await
+use tokio;
 
-// Thread-safe counter using Mutex
-struct ThreadSafeCounter {
-    count: Mutex<i32>,
-}
-
-impl ThreadSafeCounter {
-    fn new() -> Self {
-        ThreadSafeCounter {
-            count: Mutex::new(0),
-        }
-    }
-    
-    fn increment(&self) {
-        let mut count = self.count.lock().unwrap();
-        *count += 1;
-    }
-    
-    fn get(&self) -> i32 {
-        *self.count.lock().unwrap()
-    }
-}
-
-// Basic threading
+// Ownership prevents data races at compile time
 fn thread_example() {
-    // Spawn thread with closure
-    let handle = thread::spawn(|| {
-        println!("Thread is running");
-        42
-    });
-    
-    // Join and get result
-    let result = handle.join().unwrap();
-    println!("Thread result: {}", result);
-}
-
-// Sharing data between threads
-fn shared_data_example() {
-    let counter = Arc::new(ThreadSafeCounter::new());
+    let counter = Arc::new(Mutex::new(0));
     let mut handles = vec![];
     
     for i in 0..10 {
         let counter = Arc::clone(&counter);
         let handle = thread::spawn(move || {
-            for _ in 0..1000 {
-                counter.increment();
-            }
+            let mut num = counter.lock().unwrap();
+            *num += 1;
         });
         handles.push(handle);
     }
@@ -1458,1680 +1284,448 @@ fn shared_data_example() {
         handle.join().unwrap();
     }
     
-    println!("Final count: {}", counter.get());
+    println!("Final count: {}", *counter.lock().unwrap());
 }
 
 // Message passing with channels
+use std::sync::mpsc;
+
 fn channel_example() {
     let (tx, rx) = mpsc::channel();
     
-    // Spawn producer thread
     thread::spawn(move || {
-        for i in 1..=5 {
-            tx.send(i).unwrap();
-            thread::sleep(Duration::from_millis(100));
-        }
+        tx.send("Hello from thread").unwrap();
     });
     
-    // Receive messages
-    for received in rx {
-        println!("Got: {}", received);
-    }
-}
-
-// Multiple producers, single consumer
-fn multi_producer_example() {
-    let (tx, rx) = mpsc::channel();
-    
-    for id in 0..3 {
-        let tx = tx.clone();
-        thread::spawn(move || {
-            for i in 1..=5 {
-                tx.send(format!("Producer {} sent {}", id, i)).unwrap();
-            }
-        });
-    }
-    
-    drop(tx);  // Close the original sender
-    
-    for received in rx {
-        println!("{}", received);
-    }
+    let received = rx.recv().unwrap();
+    println!("Got: {}", received);
 }
 
 // Async/await with Tokio
 #[tokio::main]
 async fn async_main() {
-    // Basic async task
-    let task = tokio::spawn(async {
-        tokio::time::sleep(Duration::from_secs(1)).await;
-        "Task completed"
+    let task1 = tokio::spawn(async {
+        tokio::time::sleep(tokio::time::Duration::from_millis(500)).await;
+        "Task 1 completed"
     });
     
-    let result = task.await.unwrap();
-    println!("{}", result);
+    let task2 = tokio::spawn(async {
+        tokio::time::sleep(tokio::time::Duration::from_millis(300)).await;
+        "Task 2 completed"
+    });
     
-    // Concurrent async tasks
-    let task1 = fetch_data("data1");
-    let task2 = fetch_data("data2");
-    let task3 = fetch_data("data3");
-    
-    let (result1, result2, result3) = tokio::join!(task1, task2, task3);
-    println!("Results: {}, {}, {}", result1, result2, result3);
-}
-
-async fn fetch_data(name: &str) -> String {
-    tokio::time::sleep(Duration::from_millis(500)).await;
-    format!("Fetched {}", name)
-}
-
-// Atomic operations
-use std::sync::atomic::{AtomicI32, Ordering};
-
-fn atomic_example() {
-    let counter = Arc::new(AtomicI32::new(0));
-    let mut handles = vec![];
-    
-    for _ in 0..10 {
-        let counter = Arc::clone(&counter);
-        let handle = thread::spawn(move || {
-            for _ in 0..1000 {
-                counter.fetch_add(1, Ordering::SeqCst);
-            }
-        });
-        handles.push(handle);
-    }
-    
-    for handle in handles {
-        handle.join().unwrap();
-    }
-    
-    println!("Final atomic count: {}", counter.load(Ordering::SeqCst));
+    let (result1, result2) = tokio::join!(task1, task2);
+    println!("{}, {}", result1.unwrap(), result2.unwrap());
 }
 
 // Rayon for data parallelism
 use rayon::prelude::*;
 
-fn parallel_processing_example() {
+fn parallel_processing() {
     let numbers: Vec<i32> = (1..=1_000_000).collect();
     
-    // Parallel iterator processing
     let sum: i32 = numbers
         .par_iter()                // Parallel iterator
         .filter(|&&x| x % 2 == 0)  // Even numbers only
         .map(|&x| x * x)           // Square them
         .sum();                    // Sum the results
     
-    println!("Sum of squares of even numbers: {}", sum);
+    println!("Sum: {}", sum);
 }
 ```
 
-## 🚀 Advanced Features Comparison
+```kotlin
+// Kotlin - Coroutines
+import kotlinx.coroutines.*
 
-### Generics/Templates
+fun concurrencyExample() = runBlocking {
+    // Basic coroutine
+    launch {
+        delay(1000L)
+        println("Coroutine completed")
+    }
+    
+    // Async coroutines
+    val deferred1 = async { fetchData("Data 1") }
+    val deferred2 = async { fetchData("Data 2") }
+    
+    val results = awaitAll(deferred1, deferred2)
+    println("Results: $results")
+}
 
-```cpp
-// C++ Templates - Compile-time polymorphism
-template<typename T>
-class Container {
-    T data;
-public:
-    Container(T value) : data(value) {}
-    T get() const { return data; }
+suspend fun fetchData(name: String): String {
+    delay(500L)  // Simulate network call
+    return "Fetched $name"
+}
+
+// Channels for communication
+fun channelExample() = runBlocking {
+    val channel = Channel<String>()
+    
+    launch {
+        for (x in 1..5) {
+            channel.send("Item $x")
+        }
+        channel.close()
+    }
+    
+    for (item in channel) {
+        println("Received: $item")
+    }
+}
+
+// Flow for reactive streams
+import kotlinx.coroutines.flow.*
+
+fun flowExample() = runBlocking {
+    flow {
+        for (i in 1..3) {
+            delay(100)
+            emit(i)
+        }
+    }
+    .map { it * it }
+    .collect { println("Collected: $it") }
+}
+```
+
+```python
+# Python - Multiple concurrency models
+import asyncio
+import threading
+import concurrent.futures
+
+def thread_example():
+    def worker(name):
+        print(f"Worker {name} is running")
+    
+    threads = []
+    for i in range(4):
+        t = threading.Thread(target=worker, args=(i,))
+        threads.append(t)
+        t.start()
+    
+    for t in threads:
+        t.join()
+
+# Thread pool executor
+def executor_example():
+    def square(n):
+        return n * n
+    
+    with concurrent.futures.ThreadPoolExecutor(max_workers=4) as executor:
+        numbers = [1, 2, 3, 4, 5]
+        results = list(executor.map(square, numbers))
+        print("Results:", results)
+
+# Async/await
+async def fetch_data(name):
+    await asyncio.sleep(0.5)  # Simulate async work
+    return f"Data {name}"
+
+async def async_example():
+    # Concurrent async tasks
+    tasks = [
+        fetch_data("A"),
+        fetch_data("B"),
+        fetch_data("C")
+    ]
+    
+    results = await asyncio.gather(*tasks)
+    print("Results:", results)
+
+# Multiprocessing for CPU-bound tasks
+import multiprocessing
+
+def cpu_bound_task(n):
+    return sum(i * i for i in range(n))
+
+def multiprocessing_example():
+    with multiprocessing.Pool() as pool:
+        numbers = [100000, 200000, 300000, 400000]
+        results = pool.map(cpu_bound_task, numbers)
+        print("Results:", results)
+
+# Usage
+if __name__ == "__main__":
+    thread_example()
+    executor_example()
+    asyncio.run(async_example())
+    multiprocessing_example()
+```
+
+```javascript
+// JavaScript/TypeScript - Event loop and Web Workers
+
+// Promise-based async
+function fetchData(name) {
+    return new Promise(resolve => {
+        setTimeout(() => {
+            resolve(`Data ${name}`);
+        }, 500);
+    });
+}
+
+// async/await
+async function asyncExample() {
+    // Sequential
+    const data1 = await fetchData("A");
+    const data2 = await fetchData("B");
+    
+    // Concurrent
+    const [result1, result2, result3] = await Promise.all([
+        fetchData("X"),
+        fetchData("Y"),
+        fetchData("Z")
+    ]);
+    
+    console.log("Results:", [result1, result2, result3]);
+}
+
+// Web Workers for CPU-intensive tasks (browser)
+// main.js
+const worker = new Worker('worker.js');
+worker.postMessage({ command: 'start', data: [1, 2, 3, 4, 5] });
+worker.onmessage = function(e) {
+    console.log('Result from worker:', e.data);
 };
 
-// Template specialization
-template<>
-class Container<bool> {
-    bool data;
-public:
-    Container(bool value) : data(value) {}
-    bool get() const { return data; }
-    void flip() { data = !data; }
+// worker.js
+self.onmessage = function(e) {
+    const { command, data } = e.data;
+    if (command === 'start') {
+        const result = data.map(x => x * x);
+        self.postMessage(result);
+    }
 };
 
-// Variadic templates
-template<typename... Args>
-void print(Args... args) {
-    ((std::cout << args << " "), ...);  // C++17 fold expression
-}
+// Node.js - Worker Threads
+const { Worker, isMainThread, parentPort, workerData } = require('worker_threads');
 
-// SFINAE and concepts (C++20)
-template<typename T>
-concept Numeric = std::is_arithmetic_v<T>;
-
-template<Numeric T>
-T add(T a, T b) {
-    return a + b;
-}
-```
-
-```java
-// Java Generics - Type erasure
-public class Container<T> {
-    private T data;
+if (isMainThread) {
+    // Main thread
+    const worker = new Worker(__filename, {
+        workerData: { numbers: [1, 2, 3, 4, 5] }
+    });
     
-    public Container(T value) {
-        this.data = value;
-    }
-    
-    public T get() {
-        return data;
-    }
+    worker.on('message', (result) => {
+        console.log('Result:', result);
+    });
+} else {
+    // Worker thread
+    const { numbers } = workerData;
+    const result = numbers.map(x => x * x);
+    parentPort.postMessage(result);
 }
 
-// Bounded type parameters
-public class NumberContainer<T extends Number> {
-    private T data;
+// TypeScript with better typing
+async function typedAsyncExample(): Promise<string[]> {
+    const promises: Promise<string>[] = [
+        fetchData("TypeScript A"),
+        fetchData("TypeScript B"),
+        fetchData("TypeScript C")
+    ];
     
-    public NumberContainer(T value) {
-        this.data = value;
-    }
-    
-    public double getDoubleValue() {
-        return data.doubleValue();
-    }
-}
-
-// Wildcards
-public static void printNumbers(List<? extends Number> numbers) {
-    for (Number num : numbers) {
-        System.out.println(num);
-    }
-}
-
-// Generic methods
-public static <T> void swap(T[] array, int i, int j) {
-    T temp = array[i];
-    array[i] = array[j];
-    array[j] = temp;
+    return Promise.all(promises);
 }
 ```
 
-```csharp
-// C# Generics - Similar to Java but with some differences
-public class Container<T> {
-    private T data;
-    
-    public Container(T value) {
-        data = value;
-    }
-    
-    public T Get() => data;
-}
+## Game Development Lens
 
-// Generic constraints
-public class NumberContainer<T> where T : struct, IComparable<T> {
-    private T data;
-    
-    public NumberContainer(T value) {
-        data = value;
-    }
-    
-    public bool IsGreaterThan(T other) {
-        return data.CompareTo(other) > 0;
-    }
-}
+- **C** – Low-level engine components, embedded game systems
+- **C++** – Unreal Engine, proprietary AAA engines, performance-critical game logic  
+- **C#** – Unity (most popular indie/mobile game engine), game tooling
+- **Java** – Minecraft-style games, Android games, server backends
+- **Kotlin** – Modern Android game development, multiplatform games
+- **Rust** – Bevy engine, performance-critical game systems, modding tools
+- **Python** – Game prototyping with Pygame, AI/ML for games, game tooling
+- **JavaScript/TypeScript** – Web games (Phaser, Babylon.js), casual browser games
 
-// Multiple constraints
-public class Repository<T> where T : class, IEntity, new() {
-    public T Create() => new T();
-}
+## Web Development Lens
 
-// Covariance and contravariance
-public interface IContainer<out T> {  // Covariant
-    T Get();
-}
+- **C** – Web servers (like Nginx), CGI scripts (legacy)
+- **C++** – High-performance web servers, real-time systems backends
+- **C#** – ASP.NET Core for enterprise web apps, Blazor for WebAssembly
+- **Java** – Spring Boot enterprise backends, microservices, Android web views
+- **Kotlin** – Spring Boot with modern syntax, full-stack with Kotlin/JS
+- **Rust** – Actix-web, Warp for high-performance APIs, WebAssembly modules
+- **Python** – Django, Flask, FastAPI for rapid web development
+- **JavaScript/TypeScript** – React/Vue/Angular frontends, Node.js backends, universal web
 
-public interface IProcessor<in T> {   // Contravariant
-    void Process(T item);
-}
+## Systems Programming Lens
 
-// Generic methods
-public static void Swap<T>(ref T a, ref T b) {
-    T temp = a;
-    a = b;
-    b = temp;
-}
-```
+- **C** – Operating system kernels, device drivers, microcontrollers, bootloaders
+- **C++** – System software, compilers, databases, real-time systems
+- **C#** – Windows services, system tools (with .NET Core, now cross-platform)
+- **Java** – JVM itself, enterprise middleware, distributed systems
+- **Kotlin** – JVM-based system tools, Kotlin/Native for native system apps
+- **Rust** – Operating systems, web browsers, cryptocurrency, memory-safe system components
+- **Python** – System administration, DevOps automation, infrastructure tooling
+- **JavaScript/TypeScript** – Build tools, CLI utilities (Node.js), system scripting
 
-```rust
-// Rust Generics - Zero-cost abstractions
-struct Container<T> {
-    data: T,
-}
-
-impl<T> Container<T> {
-    fn new(value: T) -> Self {
-        Container { data: value }
-    }
-    
-    fn get(&self) -> &T {
-        &self.data
-    }
-    
-    fn into_inner(self) -> T {
-        self.data
-    }
-}
-
-// Trait bounds
-fn print_debug<T: std::fmt::Debug>(value: T) {
-    println!("{:?}", value);
-}
-
-// Multiple trait bounds
-fn process<T>(value: T) -> T 
-where 
-    T: Clone + std::fmt::Display + Default,
-{
-    println!("Processing: {}", value);
-    value.clone()
-}
-
-// Associated types
-trait Iterator {
-    type Item;
-    
-    fn next(&mut self) -> Option<Self::Item>;
-}
-
-// Generic enums
-enum Result<T, E> {
-    Ok(T),
-    Err(E),
-}
-
-enum Option<T> {
-    Some(T),
-    None,
-}
-
-// Lifetime parameters
-fn longest<'a>(x: &'a str, y: &'a str) -> &'a str {
-    if x.len() > y.len() { x } else { y }
-}
-
-// Generic structs with lifetimes
-struct Pair<'a, T> {
-    first: &'a T,
-    second: &'a T,
-}
-```
-
-### Memory Management Deep Dive
-
-```cpp
-// C++ - Manual memory management with RAII
-class ResourceManager {
-    int* data;
-    size_t size;
-    
-public:
-    // Constructor
-    ResourceManager(size_t n) : size(n) {
-        data = new int[size];
-        std::cout << "Allocated " << size << " integers\n";
-    }
-    
-    // Copy constructor
-    ResourceManager(const ResourceManager& other) : size(other.size) {
-        data = new int[size];
-        std::copy(other.data, other.data + size, data);
-        std::cout << "Copy constructed\n";
-    }
-    
-    // Move constructor
-    ResourceManager(ResourceManager&& other) noexcept 
-        : data(other.data), size(other.size) {
-        other.data = nullptr;
-        other.size = 0;
-        std::cout << "Move constructed\n";
-    }
-    
-    // Copy assignment
-    ResourceManager& operator=(const ResourceManager& other) {
-        if (this != &other) {
-            delete[] data;
-            size = other.size;
-            data = new int[size];
-            std::copy(other.data, other.data + size, data);
-            std::cout << "Copy assigned\n";
-        }
-        return *this;
-    }
-    
-    // Move assignment
-    ResourceManager& operator=(ResourceManager&& other) noexcept {
-        if (this != &other) {
-            delete[] data;
-            data = other.data;
-            size = other.size;
-            other.data = nullptr;
-            other.size = 0;
-            std::cout << "Move assigned\n";
-        }
-        return *this;
-    }
-    
-    // Destructor
-    ~ResourceManager() {
-        if (data) {
-            std::cout << "Deallocated " << size << " integers\n";
-            delete[] data;
-        }
-    }
-    
-    int& operator[](size_t index) { return data[index]; }
-};
-
-// Smart pointers
-void smartPointerExample() {
-    // unique_ptr - exclusive ownership
-    auto unique = std::make_unique<int>(42);
-    
-    // shared_ptr - shared ownership
-    auto shared1 = std::make_shared<int>(100);
-    auto shared2 = shared1;  // Reference count = 2
-    
-    // weak_ptr - non-owning observer
-    std::weak_ptr<int> weak = shared1;
-    
-    if (auto locked = weak.lock()) {
-        std::cout << "Value: " << *locked << std::endl;
-    }
-}
-```
-
-```java
-// Java - Garbage collection
-public class ResourceManager {
-    private int[] data;
-    
-    public ResourceManager(int size) {
-        data = new int[size];
-        System.out.println("Allocated " + size + " integers");
-        // No explicit deallocation needed
-    }
-    
-    // finalize() is deprecated, use try-with-resources instead
-    // for resources that need explicit cleanup
-    
-    // For external resources, implement AutoCloseable
-    static class FileResource implements AutoCloseable {
-        private final String filename;
-        
-        public FileResource(String filename) {
-            this.filename = filename;
-            System.out.println("Opened file: " + filename);
-        }
-        
-        @Override
-        public void close() {
-            System.out.println("Closed file: " + filename);
-        }
-    }
-    
-    // Usage with try-with-resources
-    public static void useResource() {
-        try (FileResource resource = new FileResource("data.txt")) {
-            // Use resource
-        }  // Automatically closed
-    }
-}
-
-// Reference types
-class ReferenceExample {
-    // All objects are references
-    List<String> list1 = new ArrayList<>();
-    List<String> list2 = list1;  // Both reference same object
-    
-    // Weak references for memory-sensitive caches
-    WeakReference<String> weakRef = new WeakReference<>(new String("data"));
-    
-    // Soft references for memory-sensitive caches
-    SoftReference<String> softRef = new SoftReference<>(new String("cached"));
-}
-```
-
-```csharp
-// C# - Garbage collection with IDisposable pattern
-public class ResourceManager : IDisposable {
-    private int[] data;
-    private bool disposed = false;
-    
-    public ResourceManager(int size) {
-        data = new int[size];
-        Console.WriteLine($"Allocated {size} integers");
-    }
-    
-    // Implement IDisposable
-    public void Dispose() {
-        Dispose(true);
-        GC.SuppressFinalize(this);
-    }
-    
-    protected virtual void Dispose(bool disposing) {
-        if (!disposed) {
-            if (disposing) {
-                // Dispose managed resources
-                Console.WriteLine("Disposing managed resources");
-            }
-            
-            // Free unmanaged resources
-            Console.WriteLine("Cleaning up unmanaged resources");
-            disposed = true;
-        }
-    }
-    
-    // Finalizer (destructor syntax)
-    ~ResourceManager() {
-        Dispose(false);
-    }
-    
-    public int this[int index] => data[index];
-}
-
-// Usage with using statement
-public static void UseResource() {
-    using (var resource = new ResourceManager(100)) {
-        // Use resource
-    }  // Automatically disposed
-    
-    // Or with using declaration (C# 8+)
-    using var resource2 = new ResourceManager(200);
-    // Disposed at end of scope
-}
-
-// Value types vs reference types
-struct Point {  // Value type - stack allocated
-    public int X, Y;
-    public Point(int x, int y) => (X, Y) = (x, y);
-}
-
-class Circle {  // Reference type - heap allocated
-    public Point Center { get; set; }
-    public double Radius { get; set; }
-}
-
-// Weak references
-public static void WeakReferenceExample() {
-    var obj = new object();
-    var weakRef = new WeakReference(obj);
-    
-    obj = null;  // Remove strong reference
-    GC.Collect();  // Force garbage collection
-    
-    if (weakRef.IsAlive) {
-        Console.WriteLine("Object still exists");
-    } else {
-        Console.WriteLine("Object was collected");
-    }
-}
-```
-
-```rust
-// Rust - Ownership system (zero-cost abstractions)
-
-// Ownership rules:
-// 1. Each value has a single owner
-// 2. When owner goes out of scope, value is dropped
-// 3. There can be many immutable references OR one mutable reference
-
-fn ownership_example() {
-    // Ownership transfer (move)
-    let s1 = String::from("hello");
-    let s2 = s1;  // s1 is no longer valid
-    // println!("{}", s1);  // Error! s1 was moved
-    
-    // Clone for deep copy
-    let s3 = s2.clone();
-    println!("{} and {}", s2, s3);  // Both valid
-    
-    // Function takes ownership
-    takes_ownership(s2);
-    // println!("{}", s2);  // Error! s2 was moved into function
-}
-
-fn takes_ownership(some_string: String) {
-    println!("{}", some_string);
-}  // some_string goes out of scope and is dropped
-
-// Borrowing (references)
-fn borrowing_example() {
-    let s1 = String::from("hello");
-    
-    // Immutable borrow
-    let len = calculate_length(&s1);
-    println!("Length of '{}' is {}", s1, len);  // s1 still valid
-    
-    // Mutable borrow
-    let mut s2 = String::from("hello");
-    change(&mut s2);
-    println!("{}", s2);
-}
-
-fn calculate_length(s: &String) -> usize {  // Immutable reference
-    s.len()
-}  // s goes out of scope, but doesn't drop the data
-
-fn change(some_string: &mut String) {  // Mutable reference
-    some_string.push_str(", world");
-}
-
-// Lifetimes - ensuring references are valid
-fn lifetime_example() {
-    let string1 = String::from("long string is long");
-    let result;
-    
-    {
-        let string2 = String::from("xyz");
-        result = longest(&string1, &string2);  // Error without lifetime annotation
-    }
-    
-    // println!("The longest string is {}", result);  // Would be error
-}
-
-// Explicit lifetime annotations
-fn longest<'a>(x: &'a str, y: &'a str) -> &'a str {
-    if x.len() > y.len() { x } else { y }
-}
-
-// Struct with lifetime parameters
-struct ImportantExcerpt<'a> {
-    part: &'a str,
-}
-
-impl<'a> ImportantExcerpt<'a> {
-    fn announce_and_return_part(&self, announcement: &str) -> &str {
-        println!("Attention please: {}", announcement);
-        self.part
-    }
-}
-
-// Smart pointers in Rust
-use std::rc::{Rc, Weak};
-use std::cell::RefCell;
-
-fn smart_pointer_example() {
-    // Box - heap allocation (like unique_ptr)
-    let boxed = Box::new(5);
-    
-    // Rc - reference counting (like shared_ptr)
-    let rc1 = Rc::new(String::from("hello"));
-    let rc2 = Rc::clone(&rc1);  // Increment reference count
-    println!("Reference count: {}", Rc::strong_count(&rc1));
-    
-    // Weak - weak reference
-    let weak = Rc::downgrade(&rc1);
-    if let Some(value) = weak.upgrade() {
-        println!("Value still exists: {}", value);
-    }
-    
-    // RefCell - interior mutability
-    let data = RefCell::new(5);
-    *data.borrow_mut() += 1;
-    println!("Value: {}", data.borrow());
-    
-    // Combination: Rc<RefCell<T>> for shared mutable data
-    let shared_data = Rc::new(RefCell::new(vec![1, 2, 3]));
-    let shared_data2 = Rc::clone(&shared_data);
-    
-    shared_data.borrow_mut().push(4);
-    println!("{:?}", shared_data2.borrow());
-}
-
-// Custom smart pointer
-struct MyBox<T> {
-    data: T,
-}
-
-impl<T> MyBox<T> {
-    fn new(x: T) -> MyBox<T> {
-        MyBox { data: x }
-    }
-}
-
-use std::ops::Deref;
-
-impl<T> Deref for MyBox<T> {
-    type Target = T;
-    
-    fn deref(&self) -> &T {
-        &self.data
-    }
-}
-
-impl<T> Drop for MyBox<T> {
-    fn drop(&mut self) {
-        println!("Dropping MyBox");
-    }
-}
-```
-
-## 📦 Package Management & Build Systems
+## Package Management & Build Systems
 
 | Language | Package Manager | Build Tool | Dependency File | Package Registry |
-|----------|----------------|------------|----------------|-----------------|
+|----------|----------------|------------|-----------------|------------------|
+| **C** | Manual, pkg-config | Make, CMake | Makefile, CMakeLists.txt | System packages |
 | **C++** | Conan, vcpkg | CMake, Make | CMakeLists.txt, conanfile.txt | ConanCenter, vcpkg |
 | **Java** | Maven, Gradle | Maven, Gradle | pom.xml, build.gradle | Maven Central |
 | **C#** | NuGet | MSBuild, dotnet | .csproj, packages.config | nuget.org |
 | **Rust** | Cargo | Cargo | Cargo.toml | crates.io |
-
-### Build Configuration Examples
-
-```cmake
-# CMakeLists.txt (C++)
-cmake_minimum_required(VERSION 3.16)
-project(MyProject VERSION 1.0)
-
-set(CMAKE_CXX_STANDARD 20)
-
-find_package(Boost REQUIRED COMPONENTS system filesystem)
-
-add_executable(myapp 
-    src/main.cpp
-    src/utils.cpp
-)
-
-target_link_libraries(myapp 
-    PRIVATE 
-    Boost::system 
-    Boost::filesystem
-)
-
-target_include_directories(myapp 
-    PRIVATE 
-    include/
-)
-```
-
-```xml
-<!-- pom.xml (Java Maven) -->
-<?xml version="1.0" encoding="UTF-8"?>
-<project xmlns="http://maven.apache.org/POM/4.0.0"
-         xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
-         xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 
-         http://maven.apache.org/xsd/maven-4.0.0.xsd">
-    <modelVersion>4.0.0</modelVersion>
-    
-    <groupId>com.example</groupId>
-    <artifactId>my-app</artifactId>
-    <version>1.0-SNAPSHOT</version>
-    <packaging>jar</packaging>
-    
-    <properties>
-        <maven.compiler.source>17</maven.compiler.source>
-        <maven.compiler.target>17</maven.compiler.target>
-    </properties>
-    
-    <dependencies>
-        <dependency>
-            <groupId>org.apache.commons</groupId>
-            <artifactId>commons-lang3</artifactId>
-            <version>3.12.0</version>
-        </dependency>
-        <dependency>
-            <groupId>org.junit.jupiter</groupId>
-            <artifactId>junit-jupiter</artifactId>
-            <version>5.8.2</version>
-            <scope>test</scope>
-        </dependency>
-    </dependencies>
-</project>
-```
-
-```xml
-<!-- .csproj (C#) -->
-<Project Sdk="Microsoft.NET.Sdk">
-
-  <PropertyGroup>
-    <TargetFramework>net6.0</TargetFramework>
-    <Nullable>enable</Nullable>
-    <ImplicitUsings>enable</ImplicitUsings>
-  </PropertyGroup>
-
-  <ItemGroup>
-    <PackageReference Include="Newtonsoft.Json" Version="13.0.1" />
-    <PackageReference Include="Serilog" Version="2.10.0" />
-    <PackageReference Include="Microsoft.Extensions.DependencyInjection" Version="6.0.0" />
-  </ItemGroup>
-
-  <ItemGroup>
-    <ProjectReference Include="..\MyLibrary\MyLibrary.csproj" />
-  </ItemGroup>
-
-</Project>
-```
-
-```toml
-# Cargo.toml (Rust)
-[package]
-name = "my-app"
-version = "0.1.0"
-edition = "2021"
-authors = ["Your Name <you@example.com>"]
-description = "A sample Rust application"
-license = "MIT"
-repository = "https://github.com/yourusername/my-app"
-
-[dependencies]
-serde = { version = "1.0", features = ["derive"] }
-tokio = { version = "1.0", features = ["full"] }
-clap = { version = "4.0", features = ["derive"] }
-anyhow = "1.0"
-
-[dev-dependencies]
-tokio-test = "0.4"
-
-[[bin]]
-name = "my-app"
-path = "src/main.rs"
-
-[profile.release]
-opt-level = 3
-lto = true
-```
-
-## 🧪 Testing Frameworks
-
-### C++
-```cpp
-// Google Test
-#include <gtest/gtest.h>
-
-TEST(MathTest, Addition) {
-    EXPECT_EQ(2 + 2, 4);
-    ASSERT_GT(5, 3);
-}
-
-class CalculatorTest : public ::testing::Test {
-protected:
-    void SetUp() override {
-        calc = std::make_unique<Calculator>();
-    }
-    
-    std::unique_ptr<Calculator> calc;
-};
-
-TEST_F(CalculatorTest, MultiplyTest) {
-    EXPECT_DOUBLE_EQ(calc->multiply(2.0, 3.0), 6.0);
-}
-
-// Catch2 (header-only alternative)
-#include <catch2/catch.hpp>
-
-TEST_CASE("Vector operations", "[vector]") {
-    std::vector<int> v{1, 2, 3};
-    
-    REQUIRE(v.size() == 3);
-    REQUIRE(v[0] == 1);
-    
-    SECTION("Adding elements") {
-        v.push_back(4);
-        REQUIRE(v.size() == 4);
-    }
-    
-    SECTION("Removing elements") {
-        v.pop_back();
-        REQUIRE(v.size() == 2);
-    }
-}
-```
-
-### Java
-```java
-// JUnit 5
-import org.junit.jupiter.api.*;
-import static org.junit.jupiter.api.Assertions.*;
-
-public class CalculatorTest {
-    private Calculator calculator;
-    
-    @BeforeEach
-    void setUp() {
-        calculator = new Calculator();
-    }
-    
-    @Test
-    @DisplayName("Addition should work correctly")
-    void testAddition() {
-        assertEquals(4, calculator.add(2, 2));
-        assertThrows(ArithmeticException.class, () -> calculator.divide(1, 0));
-    }
-    
-    @ParameterizedTest
-    @ValueSource(ints = {1, 2, 3, 4, 5})
-    void testSquare(int number) {
-        assertTrue(calculator.square(number) >= 0);
-    }
-    
-    @Test
-    @Timeout(value = 2, unit = TimeUnit.SECONDS)
-    void testSlowOperation() {
-        // Should complete within 2 seconds
-        calculator.slowOperation();
-    }
-}
-
-// Mockito for mocking
-import org.mockito.Mock;
-import org.mockito.junit.jupiter.MockitoExtension;
-
-@ExtendWith(MockitoExtension.class)
-class ServiceTest {
-    @Mock
-    private Repository repository;
-    
-    @Test
-    void testService() {
-        when(repository.findById(1L)).thenReturn(Optional.of(new User()));
-        
-        Service service = new Service(repository);
-        User result = service.getUser(1L);
-        
-        assertNotNull(result);
-        verify(repository).findById(1L);
-    }
-}
-```
-
-### C#
-```csharp
-// xUnit
-using Xunit;
-
-public class CalculatorTests {
-    private readonly Calculator _calculator = new Calculator();
-    
-    [Fact]
-    public void Add_TwoNumbers_ReturnsSum() {
-        // Arrange
-        int a = 2, b = 3;
-        
-        // Act
-        var result = _calculator.Add(a, b);
-        
-        // Assert
-        Assert.Equal(5, result);
-    }
-    
-    [Theory]
-    [InlineData(1, 2, 3)]
-    [InlineData(0, 0, 0)]
-    [InlineData(-1, 1, 0)]
-    public void Add_VariousInputs_ReturnsCorrectSum(int a, int b, int expected) {
-        var result = _calculator.Add(a, b);
-        Assert.Equal(expected, result);
-    }
-    
-    [Fact]
-    public void Divide_ByZero_ThrowsException() {
-        Assert.Throws<DivideByZeroException>(() => _calculator.Divide(1, 0));
-    }
-}
-
-// NUnit (alternative)
-using NUnit.Framework;
-
-[TestFixture]
-public class CalculatorTestsNUnit {
-    private Calculator _calculator;
-    
-    [SetUp]
-    public void Setup() {
-        _calculator = new Calculator();
-    }
-    
-    [Test]
-    public void Add_TwoNumbers_ReturnsSum() {
-        Assert.That(_calculator.Add(2, 3), Is.EqualTo(5));
-    }
-    
-    [TestCase(1, 2, 3)]
-    [TestCase(0, 0, 0)]
-    public void Add_TestCases(int a, int b, int expected) {
-        Assert.That(_calculator.Add(a, b), Is.EqualTo(expected));
-    }
-}
-
-// Moq for mocking
-using Moq;
-
-public class ServiceTests {
-    [Fact]
-    public void GetUser_ValidId_ReturnsUser() {
-        // Arrange
-        var mockRepository = new Mock<IUserRepository>();
-        mockRepository.Setup(r => r.GetById(1))
-                     .Returns(new User { Id = 1, Name = "Test" });
-        
-        var service = new UserService(mockRepository.Object);
-        
-        // Act
-        var result = service.GetUser(1);
-        
-        // Assert
-        Assert.NotNull(result);
-        Assert.Equal("Test", result.Name);
-        mockRepository.Verify(r => r.GetById(1), Times.Once);
-    }
-}
-```
-
-### Rust
-```rust
-// Built-in testing
-#[cfg(test)]
-mod tests {
-    use super::*;
-    
-    #[test]
-    fn test_addition() {
-        assert_eq!(add(2, 2), 4);
-        assert_ne!(add(1, 2), 4);
-    }
-    
-    #[test]
-    #[should_panic(expected = "Division by zero")]
-    fn test_division_by_zero() {
-        divide(1, 0);
-    }
-    
-    #[test]
-    fn test_result_type() -> Result<(), Box<dyn std::error::Error>> {
-        let result = risky_operation()?;
-        assert!(result > 0);
-        Ok(())
-    }
-    
-    #[ignore]
-    #[test]
-    fn expensive_test() {
-        // This test is ignored by default
-        // Run with: cargo test -- --ignored
-        assert!(true);
-    }
-}
-
-// Property-based testing with proptest
-use proptest::prelude::*;
-
-proptest! {
-    #[test]
-    fn test_addition_commutative(a: i32, b: i32) {
-        prop_assert_eq!(add(a, b), add(b, a));
-    }
-    
-    #[test]
-    fn test_string_length(s in ".*") {
-        prop_assert!(s.len() >= 0);
-    }
-}
-
-// Benchmarking with criterion
-use criterion::{black_box, criterion_group, criterion_main, Criterion};
-
-fn fibonacci_benchmark(c: &mut Criterion) {
-    c.bench_function("fib 20", |b| {
-        b.iter(|| fibonacci(black_box(20)))
-    });
-}
-
-criterion_group!(benches, fibonacci_benchmark);
-criterion_main!(benches);
-
-// Integration tests (in tests/ directory)
-// tests/integration_test.rs
-use my_crate;
-
-#[test]
-fn test_integration() {
-    let result = my_crate::public_function();
-    assert!(result.is_ok());
-}
-
-// Mock testing with mockall
-use mockall::predicate::*;
-use mockall::mock;
-
-mock! {
-    MyDatabase {
-        fn get_user(&self, id: u32) -> Option<User>;
-        fn save_user(&mut self, user: &User) -> Result<(), String>;
-    }
-}
-
-#[test]
-fn test_with_mock() {
-    let mut mock = MockMyDatabase::new();
-    
-    mock.expect_get_user()
-        .with(eq(1))
-        .times(1)
-        .returning(|_| Some(User { id: 1, name: "Test".to_string() }));
-    
-    let service = UserService::new(mock);
-    let user = service.find_user(1);
-    
-    assert!(user.is_some());
-}
-```
-
-## 🌐 Web Development Capabilities
-
-### C++
-```cpp
-// Crow framework (lightweight)
-#include "crow.h"
-
-int main() {
-    crow::SimpleApp app;
-    
-    CROW_ROUTE(app, "/")([]() {
-        return "Hello world";
-    });
-    
-    CROW_ROUTE(app, "/user/<int>")([](int id) {
-        return "User ID: " + std::to_string(id);
-    });
-    
-    CROW_ROUTE(app, "/api/users").methods("POST"_method)([](const crow::request& req) {
-        auto body = crow::json::load(req.body);
-        if (!body) return crow::response(400);
-        
-        return crow::response{200, "User created"};
-    });
-    
-    app.port(8080).multithreaded().run();
-}
-
-// Drogon framework (high performance)
-#include <drogon/drogon.h>
-
-int main() {
-    drogon::app().setLogPath("./")
-                 .setLogLevel(trantor::Logger::kWarn)
-                 .addListener("0.0.0.0", 8080)
-                 .setThreads(0)
-                 .enableRunAsDaemon()
-                 .run();
-}
-```
-
-### Java
-```java
-// Spring Boot
-@SpringBootApplication
-@RestController
-public class MyApplication {
-    
-    public static void main(String[] args) {
-        SpringApplication.run(MyApplication.class, args);
-    }
-    
-    @GetMapping("/")
-    public String hello() {
-        return "Hello World";
-    }
-    
-    @PostMapping("/api/users")
-    public ResponseEntity<User> createUser(@RequestBody User user) {
-        // Save user logic
-        return ResponseEntity.ok(user);
-    }
-    
-    @GetMapping("/api/users/{id}")
-    public ResponseEntity<User> getUser(@PathVariable Long id) {
-        // Find user logic
-        return ResponseEntity.ok(new User(id, "Test"));
-    }
-}
-
-// Configuration
-@Configuration
-public class WebConfig {
-    
-    @Bean
-    public CorsConfigurationSource corsConfigurationSource() {
-        CorsConfiguration configuration = new CorsConfiguration();
-        configuration.setAllowedOrigins(Arrays.asList("*"));
-        configuration.setAllowedMethods(Arrays.asList("GET", "POST", "PUT", "DELETE"));
-        
-        UrlBasedCorsConfigurationSource source = new UrlBasedCorsConfigurationSource();
-        source.registerCorsConfiguration("/**", configuration);
-        return source;
-    }
-}
-
-// Servlet (traditional approach)
-@WebServlet("/hello")
-public class HelloServlet extends HttpServlet {
-    @Override
-    protected void doGet(HttpServletRequest request, HttpServletResponse response) 
-            throws ServletException, IOException {
-        response.setContentType("text/html");
-        PrintWriter out = response.getWriter();
-        out.println("<h1>Hello World</h1>");
-    }
-}
-```
-
-### C#
-```csharp
-// ASP.NET Core Web API
-using Microsoft.AspNetCore.Mvc;
-
-var builder = WebApplication.CreateBuilder(args);
-
-// Add services
-builder.Services.AddControllers();
-builder.Services.AddEndpointsApiExplorer();
-builder.Services.AddSwaggerGen();
-
-var app = builder.Build();
-
-// Configure pipeline
-if (app.Environment.IsDevelopment()) {
-    app.UseSwagger();
-    app.UseSwaggerUI();
-}
-
-app.UseHttpsRedirection();
-app.UseAuthorization();
-app.MapControllers();
-
-app.Run();
-
-[ApiController]
-[Route("api/[controller]")]
-public class UsersController : ControllerBase {
-    
-    [HttpGet]
-    public ActionResult<IEnumerable<User>> GetUsers() {
-        return Ok(new[] { new User(1, "Alice"), new User(2, "Bob") });
-    }
-    
-    [HttpGet("{id}")]
-    public ActionResult<User> GetUser(int id) {
-        var user = new User(id, "Test");
-        return Ok(user);
-    }
-    
-    [HttpPost]
-    public ActionResult<User> CreateUser(User user) {
-        // Save user logic
-        return CreatedAtAction(nameof(GetUser), new { id = user.Id }, user);
-    }
-}
-
-// Minimal APIs (C# 10+)
-var builder = WebApplication.CreateBuilder(args);
-var app = builder.Build();
-
-app.MapGet("/", () => "Hello World!");
-
-app.MapGet("/users/{id}", (int id) => new User(id, "Test"));
-
-app.MapPost("/users", (User user) => Results.Created($"/users/{user.Id}", user));
-
-app.Run();
-
-public record User(int Id, string Name);
-
-// Blazor (C# in the browser)
-@page "/counter"
-
-<h3>Counter</h3>
-
-<p>Current count: @currentCount</p>
-<button @onclick="IncrementCount">Click me</button>
-
-@code {
-    private int currentCount = 0;
-    
-    private void IncrementCount() {
-        currentCount++;
-    }
-}
-```
-
-### Rust
-```rust
-// Actix Web
-use actix_web::{web, App, HttpServer, Result, middleware::Logger};
-use serde::{Deserialize, Serialize};
-
-#[derive(Serialize, Deserialize)]
-struct User {
-    id: u32,
-    name: String,
-}
-
-async fn hello() -> Result<&'static str> {
-    Ok("Hello world!")
-}
-
-async fn create_user(user: web::Json<User>) -> Result<web::Json<User>> {
-    // Save user logic
-    Ok(web::Json(user.into_inner()))
-}
-
-async fn get_user(path: web::Path<u32>) -> Result<web::Json<User>> {
-    let id = path.into_inner();
-    Ok(web::Json(User {
-        id,
-        name: "Test".to_string(),
-    }))
-}
-
-#[actix_web::main]
-async fn main() -> std::io::Result<()> {
-    env_logger::init();
-    
-    HttpServer::new(|| {
-        App::new()
-            .wrap(Logger::default())
-            .route("/", web::get().to(hello))
-            .route("/users", web::post().to(create_user))
-            .route("/users/{id}", web::get().to(get_user))
-    })
-    .bind("127.0.0.1:8080")?
-    .run()
-    .await
-}
-
-// Warp (alternative)
-use warp::Filter;
-
-#[tokio::main]
-async fn main() {
-    let hello = warp::path::end()
-        .map(|| "Hello, World!");
-        
-    let users = warp::path("users")
-        .and(warp::path::param::<u32>())
-        .map(|id: u32| format!("User ID: {}", id));
-    
-    let routes = hello.or(users);
-    
-    warp::serve(routes)
-        .run(([127, 0, 0, 1], 3030))
-        .await;
-}
-
-// Axum (modern alternative)
-use axum::{
-    extract::{Path, Json},
-    http::StatusCode,
-    response::Json as ResponseJson,
-    routing::{get, post},
-    Router,
-};
-
-async fn hello_world() -> &'static str {
-    "Hello, World!"
-}
-
-async fn create_user(Json(payload): Json<User>) -> (StatusCode, Json<User>) {
-    (StatusCode::CREATED, Json(payload))
-}
-
-async fn get_user(Path(id): Path<u32>) -> Json<User> {
-    Json(User {
-        id,
-        name: "Test".to_string(),
-    })
-}
-
-#[tokio::main]
-async fn main() {
-    let app = Router::new()
-        .route("/", get(hello_world))
-        .route("/users", post(create_user))
-        .route("/users/:id", get(get_user));
-    
-    axum::Server::bind(&"0.0.0.0:3000".parse().unwrap())
-        .serve(app.into_make_service())
-        .await
-        .unwrap();
-}
-```
-
-## 🗄️ Database Connectivity
-
-### C++
-```cpp
-// SQLite with SQLiteCpp
-#include <SQLiteCpp/SQLiteCpp.h>
-
-class DatabaseManager {
-    SQLite::Database db;
-    
-public:
-    DatabaseManager() : db("users.db", SQLite::OPEN_READWRITE | SQLite::OPEN_CREATE) {
-        db.exec("CREATE TABLE IF NOT EXISTS users ("
-                "id INTEGER PRIMARY KEY AUTOINCREMENT,"
-                "name TEXT NOT NULL,"
-                "email TEXT UNIQUE)");
-    }
-    
-    void insertUser(const std::string& name, const std::string& email) {
-        SQLite::Statement query(db, "INSERT INTO users (name, email) VALUES (?, ?)");
-        query.bind(1, name);
-        query.bind(2, email);
-        query.exec();
-    }
-    
-    std::vector<User> getAllUsers() {
-        SQLite::Statement query(db, "SELECT id, name, email FROM users");
-        std::vector<User> users;
-        
-        while (query.executeStep()) {
-            users.emplace_back(
-                query.getColumn(0).getInt(),
-                query.getColumn(1).getText(),
-                query.getColumn(2).getText()
-            );
-        }
-        
-        return users;
-    }
-};
-
-// PostgreSQL with libpqxx
-#include <pqxx/pqxx>
-
-class PostgresManager {
-    pqxx::connection conn;
-    
-public:
-    PostgresManager() : conn("dbname=mydb user=postgres password=secret host=localhost") {
-        if (!conn.is_open()) {
-            throw std::runtime_error("Failed to connect to database");
-        }
-    }
-    
-    void insertUser(const std::string& name, const std::string& email) {
-        pqxx::work txn(conn);
-        txn.exec_params("INSERT INTO users (name, email) VALUES ($1, $2)", name, email);
-        txn.commit();
-    }
-    
-    std::vector<User> getUsers() {
-        pqxx::nontransaction n(conn);
-        pqxx::result r = n.exec("SELECT id, name, email FROM users");
-        
-        std::vector<User> users;
-        for (const auto& row : r) {
-            users.emplace_back(
-                row[0].as<int>(),
-                row[1].as<std::string>(),
-                row[2].as<std::string>()
-            );
-        }
-        
-        return users;
-    }
-};
-```
-
-### Java
-```java
-// JDBC with connection pooling
-import java.sql.*;
-import javax.sql.DataSource;
-import com.zaxxer.hikari.HikariConfig;
-import com.zaxxer.hikari.HikariDataSource;
-
-public class DatabaseManager {
-    private final DataSource dataSource;
-    
-    public DatabaseManager() {
-        HikariConfig config = new HikariConfig();
-        config.setJdbcUrl("jdbc:postgresql://localhost/mydb");
-        config.setUsername("postgres");
-        config.setPassword("secret");
-        config.setMaximumPoolSize(10);
-        
-        this.dataSource = new HikariDataSource(config);
-    }
-    
-    public void insertUser(String name, String email) throws SQLException {
-        String sql = "INSERT INTO users (name, email) VALUES (?, ?)";
-        
-        try (Connection conn = dataSource.getConnection();
-             PreparedStatement stmt = conn.prepareStatement(sql)) {
-            
-            stmt.setString(1, name);
-            stmt.setString(2, email);
-            stmt.executeUpdate();
-        }
-    }
-    
-    public List<User> getAllUsers() throws SQLException {
-        String sql = "SELECT id, name, email FROM users";
-        List<User> users = new ArrayList<>();
-        
-        try (Connection conn = dataSource.getConnection();
-             PreparedStatement stmt = conn.prepareStatement(sql);
-             ResultSet rs = stmt.executeQuery()) {
-            
-            while (rs.next()) {
-                users.add(new User(
-                    rs.getInt("id"),
-                    rs.getString("name"),
-                    rs.getString("email")
-                ));
-            }
-        }
-        
-        return users;
-    }
-}
-
-// JPA with Hibernate
-@Entity
-@Table(name = "users")
-public class User {
-    @Id
-    @GeneratedValue(strategy = GenerationType.IDENTITY)
-    private Long id;
-    
-    @Column(nullable = false)
-    private String name;
-    
-    @Column(unique = true)
-    private String email;
-    
-    // Constructors, getters, setters
-}
-
-@Repository
-public interface UserRepository extends JpaRepository<User, Long> {
-    List<User> findByNameContaining(String name);
-    Optional<User> findByEmail(String email);
-    
-    @Query("SELECT u FROM User u WHERE u.name = ?1 AND u.email = ?2")
-    Optional<User> findByNameAndEmail(String name, String email);
-}
-
-@Service
-@Transactional
-public class UserService {
-    @Autowired
-    private UserRepository userRepository;
-    
-    public User createUser(String name, String email) {
-        User user = new User(name, email);
-        return userRepository.save(user);
-    }
-    
-    public List<User> getAllUsers() {
-        return userRepository.findAll();
-    }
-    
-    public Optional<User> findByEmail(String email) {
-        return userRepository.findByEmail(email);
-    }
-}
-```
-
-### C#
-```csharp
-// Entity Framework Core
-using Microsoft.EntityFrameworkCore;
-
-public class User {
-    public int Id { get; set; }
-    public string Name { get; set; } = string.Empty;
-    public string Email { get; set; } = string.Empty;
-}
-
-public class AppDbContext : DbContext {
-    public DbSet<User> Users { get; set; }
-    
-    protected override void OnConfiguring(DbContextOptionsBuilder optionsBuilder) {
-        optionsBuilder.UseNpgsql("Host=localhost;Database=mydb;Username=postgres;Password=secret");
-    }
-    
-    protected override void OnModelCreating(ModelBuilder modelBuilder) {
-        modelBuilder.Entity<User>(entity => {
-            entity.HasKey(e => e.Id);
-            entity.Property(e => e.Name).IsRequired();
-            entity.HasIndex(e => e.Email).IsUnique();
-        });
-    }
-}
-
-public class UserService {
-    private readonly AppDbContext _context;
-    
-    public UserService(AppDbContext context) {
-        _context = context;
-    }
-    
-    public async Task<User> CreateUserAsync(string name, string email) {
-        var user = new User { Name = name, Email = email };
-        _context.Users.Add(user);
-        await _context.SaveChangesAsync();
-        return user;
-    }
-    
-    public async Task<List<User>> GetAllUsersAsync() {
-        return await _context.Users.ToListAsync();
-    }
-    
-    public async Task<User?> FindByEmailAsync(string email) {
-        return await _context.Users
-            .FirstOrDefaultAsync(u => u.Email == email);
-    }
-    
-    public async Task<List<User>> SearchUsersAsync(string searchTerm) {
-        return await _context.Users
-            .Where(u => u.Name.Contains(searchTerm) || u.Email.Contains(searchTerm))
-            .OrderBy(u => u.Name)
-            .ToListAsync();
-    }
-}
-
-// Dapper (lightweight ORM)
-using Dapper;
-using Npgsql;
-
-public class UserRepository {
-    private readonly string _connectionString;
-    
-    public UserRepository(string connectionString) {
-        _connectionString = connectionString;
-    }
-    
-    public async Task<int> CreateUserAsync(string name, string email) {
-        const string sql = @"
-            INSERT INTO users (name, email) 
-            VALUES (@Name, @Email) 
-            RETURNING id";
-            
-        using var connection = new NpgsqlConnection(_connectionString);
-        return await connection.QuerySingleAsync<int>(sql, new { Name = name, Email = email });
-    }
-    
-    public async Task<IEnumerable<User>> GetAllUsersAsync() {
-        const string sql = "SELECT id, name, email FROM users ORDER BY name";
-        
-        using var connection = new NpgsqlConnection(_connectionString);
-        return await connection.QueryAsync<User>(sql);
-    }
-    
-    public async Task<User?> FindByEmailAsync(string email) {
-        const string sql = "SELECT id, name, email FROM users WHERE email = @Email";
-        
-        using var connection = new NpgsqlConnection(_connectionString);
-        return await connection.QuerySingleOrDefaultAsync<User>(sql, new { Email = email });
-    }
-}
-```
-
-### Rust
-```rust
-// SQLx (async SQL toolkit)
-use sqlx::{PgPool, FromRow};
-use serde::{Serialize, Deserialize};
-
-#[derive(Debug, FromRow, Serialize, Deserialize)]
-struct User {
-    id: i32,
-    name: String,
-    email: String,
-}
-
-pub struct DatabaseManager {
-    pool: PgPool,
-}
-
-impl DatabaseManager {
-    pub async fn new(database_url: &str) -> Result<Self, sqlx::Error> {
-        let pool = PgPool::connect(database_url).await?;
-        
-        // Run migrations
-        sqlx::migrate!("./migrations").run(&pool).await?;
-        
-        Ok(Self { pool })
-    }
-    
-    pub async fn create_user(&self, name: &str, email: &str) -> Result<i32, sqlx::Error> {
-        let result = sqlx::query!(
-            "INSERT INTO users (name, email) VALUES ($1, $2) RETURNING id",
-            name,
-            email
-        )
-        .fetch_one(&self.pool)
-        .await?;
-        
-        Ok(result.id)
-    }
-    
-    pub async fn get_all_users(&self) -> Result<Vec<User>, sqlx::Error> {
-        let users = sqlx::query_as!(
-            User,
-            "SELECT id, name, email FROM users ORDER BY name"
-        )
-        .fetch_all(&self.pool)
-        .await?;
-        
-        Ok(users)
-    }
-    
-    pub async fn find_by_email(&self, email: &str) -> Result<Option<User>, sqlx::Error> {
-        let user = sqlx::query_as!(
-            User,
-            "SELECT id, name, email FROM users WHERE email = $1",
-            email
-        )
-        .fetch_optional(&self.pool)
-        .await?;
-        
-        Ok(user)
-    }
-    
-    pub async fn search_users(&self, search_term: &str) -> Result<Vec<User>, sql
+| **Kotlin** | Maven, Gradle | Gradle, Maven | build.gradle.kts, pom.xml | Maven Central |
+| **Python** | pip, conda | setuptools, Poetry | requirements.txt, pyproject.toml | PyPI |
+| **JS/TS** | npm, yarn, pnpm | webpack, Vite | package.json | npmjs.com |
+
+## Performance Characteristics
+
+### Runtime Performance (Relative)
+
+| Language | Raw Performance | Memory Usage | Startup Time | Development Speed |
+|----------|----------------|--------------|--------------|------------------|
+| **C** | Highest | Lowest | Instant | Slow |
+| **C++** | Highest | Low | Instant | Slow |
+| **Rust** | Highest | Low | Instant | Medium |
+| **Java** | High (after JIT warmup) | Medium-High | Slow (JVM startup) | Fast |
+| **C#** | High (after JIT warmup) | Medium-High | Medium | Fast |
+| **Kotlin** | High (JVM) / Medium (Native) | Medium-High | Slow (JVM) | Fast |
+| **Python** | Low | Medium | Fast | Very Fast |
+| **JS/TS** | Medium (V8 optimized) | Medium | Fast | Very Fast |
+
+### Memory Management Comparison
+
+**Manual (C, C++)**
+- Complete control over memory allocation and deallocation
+- Zero runtime overhead
+- High risk of memory leaks, double-frees, use-after-free bugs
+- Requires careful programming and extensive testing
+
+**Garbage Collection (Java, C#, Kotlin, Python, JS)**
+- Automatic memory management
+- Safe from memory corruption bugs
+- Periodic pause times for garbage collection
+- Higher memory overhead due to GC metadata
+
+**Ownership System (Rust)**
+- Compile-time memory safety guarantees
+- Zero runtime overhead
+- No garbage collection pauses
+- Learning curve for ownership and borrowing concepts
+
+## Quick Decision Matrix
+
+### Choose C When:
+- Writing operating system kernels or device drivers
+- Extreme memory constraints (embedded systems)
+- Need maximum portability across platforms
+- Building foundational libraries that other languages will use
+- **Avoid if**: Memory safety is critical, development speed matters
+
+### Choose C++ When:
+- Building game engines or high-performance games
+- Need maximum performance with some higher-level features
+- Working with existing C++ codebases
+- Real-time systems with strict latency requirements
+- **Avoid if**: Team lacks C++ expertise, safety is paramount
+
+### Choose Rust When:
+- System-level programming with safety guarantees
+- Performance-critical applications that must be memory-safe
+- Building CLI tools, web servers, or blockchain applications
+- WebAssembly development
+- **Avoid if**: Rapid prototyping needed, team new to systems concepts
+
+### Choose Java When:
+- Building enterprise applications or microservices
+- Android development
+- Large team development with established practices
+- Need mature ecosystem and extensive libraries
+- **Avoid if**: Startup time critical, minimal memory footprint required
+
+### Choose C# When:
+- Windows-first enterprise applications
+- Unity game development
+- Web development with ASP.NET Core
+- Need rapid development with Microsoft ecosystem integration
+- **Avoid if**: Primary target is non-Windows, JVM ecosystem preferred
+
+### Choose Kotlin When:
+- Modern Android development
+- Existing Java codebase that needs modernization
+- Want Java ecosystem with better language ergonomics
+- Multiplatform development (JVM, Android, Native, JS)
+- **Avoid if**: Team unfamiliar with JVM, need maximum ecosystem maturity
+
+### Choose Python When:
+- Rapid prototyping and scripting
+- Data science, machine learning, or scientific computing
+- Web development with Django/Flask/FastAPI
+- System administration and DevOps tooling
+- **Avoid if**: Performance critical, need compiled distribution
+
+### Choose JavaScript/TypeScript When:
+- Web frontend development (essential)
+- Full-stack development with Node.js
+- Cross-platform desktop apps (Electron)
+- Need rapid development and deployment
+- **Avoid if**: CPU-intensive computing, need predictable performance
+
+## Future Trends & Evolution
+
+### Language Evolution Directions
+
+**C (C23)**
+- Improved Unicode support
+- Better bounds checking
+- Standardized threading primitives
+
+**C++ (C++26 and beyond)**
+- Modules becoming standard
+- Coroutines stabilization
+- Better compile-time computation
+- Networking library standardization
+- Memory safety improvements
+
+**Java (Project Loom, Panama, Amber)**
+- Virtual threads for lightweight concurrency
+- Foreign function interface improvements
+- Pattern matching enhancements
+- Value types (Project Valhalla)
+
+**C# (.NET 8+)**
+- Native AOT compilation improvements
+- Source generators expansion
+- Cloud-native optimizations
+- Performance improvements
+
+**Rust (2024 Edition+)**
+- Async trait stabilization
+- Generic associated types
+- Const generics improvements
+- Better compile times and error messages
+
+**Kotlin**
+- Kotlin Multiplatform Mobile stability
+- Compose Multiplatform expansion
+- Performance improvements in Kotlin/Native
+
+**Python (3.12+)**
+- Performance improvements with specialized interpreter
+- Better error messages and debugging
+- Structural pattern matching enhancements
+
+**JavaScript/TypeScript**
+- ES2024+ features (decorators, pattern matching)
+- WebAssembly integration improvements
+- Better tree-shaking and bundling
+- TypeScript performance optimizations
+
+## Footnotes
+
+- Performance benchmarks are context-sensitive; microbenchmarks ≠ real applications
+- Language popularity (GitHub, Stack Overflow surveys) indicates ecosystem maturity but doesn't equal "best choice"
+- Consider your team's expertise, project timeline, and maintenance requirements over pure technical metrics
+- Most successful projects use multiple languages - choose the right tool for each component
+
+---
+
+**Summary**: Each language excels in different domains. C and C++ offer maximum performance and control. Java and C# provide mature enterprise ecosystems. Rust combines performance with safety. Kotlin modernizes JVM development. Python excels at rapid development and scripting. JavaScript/TypeScript dominates web development. Choose based on your specific requirements, team expertise, and long-term maintenance considerations.
