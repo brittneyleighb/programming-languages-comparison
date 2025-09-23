@@ -4,7 +4,7 @@
 
 ## [Click here for the guide](overview.md)
 
-> Analogies for comparison:
+> Analogies/metaphors for comparison:
 
 | Language | Construction Metaphor | Vehicle Analogy | Memory Management |
 |----------|----------------------|-----------------|-------------------|
