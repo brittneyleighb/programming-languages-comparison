@@ -22,38 +22,38 @@ Unlike superficial comparisons, this guide provides:
 
 ## 📚 What's Inside?
 
-### 🏗️ [Core Concepts](programming-languages-comparison.md#-high-level-overview)
+### 🏗️ [Core Concepts](programming-languages-comparison.md#high-level-overview)
 Understanding the fundamental philosophies and design principles behind each language
 
-### 📝 [Syntax Comparison](programming-languages-comparison.md#-comprehensive-syntax-comparison) 
+### 📝 [Syntax Comparison](programming-languages-comparison.md#comprehensive-syntax-comparison) 
 Side-by-side examples covering:
 - Variables, functions, and data structures
 - Object-oriented programming patterns
 - Error handling approaches
 - Concurrency and parallelism models
 
-### 🚀 [Advanced Features](programming-languages-comparison.md#-advanced-features-comparison)
+### 🚀 [Advanced Features](programming-languages-comparison.md#advanced-features-comparison)
 Deep dive into:
 - Generics and templates
 - Memory management strategies
 - Performance optimization techniques
 - Package management and build systems
 
-### 🌐 [Real-World Applications](programming-languages-comparison.md#-web-development-capabilities)
+### 🌐 [Real-World Applications](programming-languages-comparison.md#web-development-capabilities)
 Production-ready examples for:
 - Web development frameworks
 - Database connectivity
 - Testing strategies
 - Deployment and containerization
 
-### 📈 [Performance & Security](programming-languages-comparison.md#-performance-characteristics)
+### 📈 [Performance & Security](programming-languages-comparison.md#performance-characteristics)
 Analysis of:
 - Runtime performance characteristics
 - Memory safety guarantees  
 - Compilation vs execution trade-offs
 - Security feature comparisons
 
-### 🎓 [Career Guidance](programming-languages-comparison.md#-learning-paths--career-implications)
+### 🎓 [Career Guidance](programming-languages-comparison.md#learning-paths--career-implications)
 Strategic advice on:
 - Learning path recommendations
 - Industry usage patterns
@@ -62,14 +62,14 @@ Strategic advice on:
 ## 🚀 Quick Start
 
 ### For Students
-1. Start with the [High-Level Overview](programming-languages-comparison.md#-high-level-overview) to understand core concepts
-2. Work through [Syntax Comparisons](programming-languages-comparison.md#-comprehensive-syntax-comparison) with hands-on practice
-3. Use the [Quick Decision Matrix](programming-languages-comparison.md#-quick-decision-matrix) for project choices
+1. Start with the [High-Level Overview](programming-languages-comparison.md#high-level-overview) to understand core concepts
+2. Work through [Syntax Comparisons](programming-languages-comparison.md#comprehensive-syntax-comparison) with hands-on practice
+3. Use the [Quick Decision Matrix](programming-languages-comparison.md#quick-decision-matrix) for project choices
 
 ### For Professionals
-1. Jump to [Performance Characteristics](programming-languages-comparison.md#-performance-characteristics) for technical decisions
-2. Review [Deployment Models](programming-languages-comparison.md#-deployment--distribution) for infrastructure planning
-3. Check [Future Trends](programming-languages-comparison.md#-future-trends--evolution) for strategic planning
+1. Jump to [Performance Characteristics](programming-languages-comparison.md#performance-characteristics) for technical decisions
+2. Review [Deployment Models](programming-languages-comparison.md#deployment--distribution) for infrastructure planning
+3. Check [Future Trends](programming-languages-comparison.md#future-trends--evolution) for strategic planning
 
 ## 🎨 Learning Aids
 
