@@ -1,4 +1,4 @@
-# Programming Languages Comparison: The Ultimate Developer's Guide
+# Programming Languages Comparison: A Developer's Guide
 *Updated: 2025-09-23*
 
 This comparison is aimed at **beginners/intermediates choosing a first or next language for apps, web, or game dev** (not an exhaustive survey of all paradigms).  
