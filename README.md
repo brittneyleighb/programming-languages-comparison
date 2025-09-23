@@ -108,20 +108,6 @@ node example.js
 
 Contributions are welcome! This guide benefits from community input and real-world experiences.
 
-### How to Contribute:
-- **Report Issues**: Found an error or outdated information? Open an issue
-- **Suggest Improvements**: Have ideas for new sections or better examples? Start a discussion  
-- **Submit Examples**: Add real-world code examples or case studies via Pull Request
-- **Expand Coverage**: Help improve existing sections or add new language comparisons
-
-### What We're Looking For:
-- Industry-specific use cases and examples
-- Updated framework and library examples
-- Performance insights from real-world usage
-- Educational improvements and learning resources
-
-## Related Resources
-
 ### Official Documentation
 - [C Reference](https://en.cppreference.com/w/c)
 - [C++ Reference](https://en.cppreference.com/)
