@@ -4,7 +4,7 @@
 
 ## [Click here for the guide](overview.md)
 
-This guide uses **metaphors and analogies** to make complex concepts accessible:
+> This guide uses **metaphors and analogies** to make complex concepts accessible:
 
 | Language | Construction Metaphor | Vehicle Analogy | Memory Management |
 |----------|----------------------|-----------------|-------------------|
