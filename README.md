@@ -4,7 +4,7 @@
 
 ## [Click here for the guide](overview.md)
 
-> This guide uses **metaphors and analogies** to make complex concepts accessible:
+> Analogies for comparison:
 
 | Language | Construction Metaphor | Vehicle Analogy | Memory Management |
 |----------|----------------------|-----------------|-------------------|
@@ -80,10 +80,3 @@ Contributions are welcome! This guide benefits from community input and real-wor
 - [Oracle Java Tutorials](https://docs.oracle.com/javase/tutorial/) - Official Java learning path
 
 Educators are welcome to adapt this content for their needs. Attribution is appreciated but not required.
-
-## 📖 How to Use This Guide
-
-- **For Comparison**: Use the tables and matrices to understand trade-offs between languages
-- **For Learning**: Work through code examples in your preferred order
-- **For Decision Making**: Reference the decision criteria based on your project requirements
-- **For Teaching**: Use the metaphors and structured examples in educational contexts
