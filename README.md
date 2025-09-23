@@ -104,10 +104,6 @@ tsc example.ts
 node example.js
 ```
 
-## Contributing
-
-Contributions are welcome! This guide benefits from community input and real-world experiences.
-
 ### Official Documentation
 - [C Reference](https://en.cppreference.com/w/c)
 - [C++ Reference](https://en.cppreference.com/)
