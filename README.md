@@ -2,64 +2,9 @@
 
 > A comprehensive, side-by-side comparison of **C**, **C++**, **Java**, **C#**, **Rust**, **Kotlin**, **Python**, and **JavaScript/TypeScript** 
 
-## What is This?
+## [Click here for the guide](guide.md)
 
-This repository contains a comprehensive programming language comparison guide designed for:
-- **Computer Science students** learning multiple languages
-- **Professional developers** choosing technologies for new projects
-- **Engineering teams** making architectural decisions
-- **Career changers** understanding the programming landscape
-
-## Why This Guide?
-
-This guide provides:
-- **Real-world code examples** for every concept across 8 major languages
-- **Practical decision frameworks** focused on trade-offs that matter
-- **Performance characteristics** and memory management deep dives
-- **Specialized use case lenses** (game dev, web dev, systems programming)
-- **Career guidance** and industry usage patterns
-- **Future trends** and language evolution insights
-
-## What's Inside?
-
-### [Decision Framework](programming-languages-comparison.md#how-to-decide)
-Practical criteria for choosing languages based on what actually matters for your project
-
-### [At-a-Glance Comparison](programming-languages-comparison.md#at-a-glance-table) 
-Quick reference table covering all 8 languages with their strengths and gotchas
-
-### [Comprehensive Syntax Examples](programming-languages-comparison.md#comprehensive-syntax-comparison)
-Side-by-side code examples covering:
-- Variables, functions, and data structures
-- Object-oriented programming patterns  
-- Error handling approaches
-- Concurrency and parallelism models
-
-### [Specialized Use Cases](programming-languages-comparison.md#game-development-lens)
-Real-world application guidance for:
-- Game development
-- Web development  
-- Systems programming
-- Enterprise applications
-
-### [Decision Matrices](programming-languages-comparison.md#quick-decision-matrix)
-Clear guidance on when to choose each language with specific scenarios
-
-## Quick Start
-
-### For Students
-1. Start with the [Decision Framework](programming-languages-comparison.md#how-to-decide) to understand what questions to ask
-2. Use the [At-a-Glance Table](programming-languages-comparison.md#at-a-glance-table) for quick comparisons
-3. Work through [Syntax Examples](programming-languages-comparison.md#comprehensive-syntax-comparison) hands-on
-
-### For Professionals  
-1. Jump to [Decision Matrices](programming-languages-comparison.md#quick-decision-matrix) for project planning
-2. Review [Use Case Lenses](programming-languages-comparison.md#game-development-lens) for your domain
-3. Check [Performance Characteristics](programming-languages-comparison.md#performance-characteristics) for technical requirements
-
-## Learning Aids
-
-This guide uses **clear analogies** to make complex concepts accessible:
+Language comparison with analogies/metaphors:
 
 | Language | Construction Metaphor | Memory Management | Best For |
 |----------|----------------------|-------------------|----------|
