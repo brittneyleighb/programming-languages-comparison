@@ -1,8 +1,12 @@
 # Programming Languages Comparison: A Developer's Guide
-*Updated: 2025-09-23*
+*Originally written: 2025-09-23 · Targeted standards review: 2026-11-16*
 
 This comparison is aimed at **beginners/intermediates choosing a first or next language for apps, web, or game dev** (not an exhaustive survey of all paradigms).  
-The focus: practical trade-offs, ecosystem fit, and when to pick which tool.
+The focus: practical trade-offs, ecosystem fit, and when to pick which tool. **A language specification, an implementation (such as CPython or V8), and a toolchain (such as TypeScript or Cargo) are different layers.** Statements about performance and concurrency are implementation- and workload-dependent. This review checks selected version-sensitive statements; most code fragments have **not** been compiled end-to-end.
+
+**Standards status matters:** *standardized*, *available in a particular implementation*, and *proposed or supported by a transpiler* are not interchangeable. See [versioned primary references](#standards-and-versioned-primary-references) before relying on a feature in production.
+
+[Run the executable ECMAScript 2024 checks](examples/ecmascript-2024.mjs) using Node 22+. These checks cover named features, not the entire guide.
 
 ---
 
@@ -30,8 +34,8 @@ When choosing a language, ask what you care most about:
 | **Java** | JVM, Android        | GC                 | threads, virtual threads | Gradle/Maven    | JVM ecosystem| Mature libs, Android, servers<br>Heavier footprint for small tools |
 | **Kotlin** | JVM, Multiplatform| GC                 | coroutines               | Gradle          | JVM/Native   | Modern Android/JVM<br>Smaller ecosystem than Java |
 | **C#**   | .NET, Windows       | GC                 | async/await, TPL         | MSBuild/NuGet   | .NET/P-Invoke| Enterprise, Unity, web<br>Microsoft ecosystem dependency |
-| **Python** | Scripts, ML, web  | GC                 | threads, asyncio         | pip/venv        | C FFI        | Fast prototyping, ML glue<br>Slow for compute-heavy workloads |
-| **JS/TS** | Browser, Node.js   | GC                 | event loop, Web Workers  | npm             | WASM, FFI    | Web front-end + full stack<br>Callback hell if not managed well |
+| **Python** | Scripts, ML, web  | CPython refcount + cycle GC | threads, asyncio; optional free-threaded builds | pip/venv | C FFI | Rapid prototyping, automation; CPU performance varies by implementation and workload |
+| **JS/TS** | Browser, Node.js (JS runtime) | GC | event loop, workers | npm, tsc | WASM, FFI | JS runs; TypeScript typically checks types and emits JS; browser/Node features differ |
 
 ---
 
@@ -54,13 +58,13 @@ Think of these languages like different construction approaches:
 |---------|---|-----|------|----|------|--------|--------|-------|
 | **First Release** | 1972 | 1985 | 1995 | 2000 | 2010 | 2011 | 1991 | 1995/2012 |
 | **Paradigm** | Procedural | Multi-paradigm | OOP + Functional | OOP + Functional | Systems + Functional | OOP + Functional | Multi-paradigm | Multi-paradigm |
-| **Memory Management** | Manual | Manual (RAII) | Garbage Collection | Garbage Collection | Ownership System | Garbage Collection | Garbage Collection | Garbage Collection |
-| **Performance** | Highest | Highest | High (JIT optimized) | High (JIT optimized) | Highest | High | Lower | Medium |
-| **Memory Safety** | Manual | Manual | Memory-safe | Memory-safe | Compile-time guarantees | Memory-safe | Memory-safe | Memory-safe |
+| **Memory Management** | Manual | RAII + explicit control | Garbage Collection | Garbage Collection | Ownership / borrowing | JVM GC or Native runtime | CPython reference counting + cyclic GC | JS runtime GC; TS types erased |
+| **Performance** | Native; workload dependent | Native; workload dependent | JVM JIT / AOT options | JIT / AOT options | Native; workload dependent | JVM / Native target dependent | Implementation and extensions dependent | JS engine / workload dependent |
+| **Memory Safety** | Manual; undefined behavior possible | Manual + RAII; UB still possible | Managed language; native interop caveats | Managed language; unsafe/interop caveats | Safe Rust enforces ownership; unsafe code requires review | Managed code / target caveats | Managed objects; extensions can be unsafe | JS managed runtime; TS's erased types are not runtime checks |
 | **Learning Curve** | Moderate | Very Steep | Moderate | Moderate | Steep | Easy-Moderate | Easy | Easy-Moderate |
-| **Compile Time** | Fast | Slow-Medium | Fast (JIT) | Fast (JIT) | Slow | Fast | Interpreted | Fast (if TypeScript) |
-| **Runtime Overhead** | None | None | JVM | .NET Runtime | None | JVM/Native | Interpreter | V8/Node |
-| **Cross-Platform** | Yes | Yes (with effort) | Write once, run anywhere | Improving (was Windows-focused) | Excellent | Excellent | Excellent | Universal |
+| **Compilation / execution** | Ahead-of-time | Ahead-of-time | Bytecode compilation + JVM JIT / AOT | IL compilation + .NET JIT / AOT | Ahead-of-time (usually) | JVM bytecode / Native / JS | CPython bytecode + interpreter, other implementations | JS engine parsing/JIT; TS typecheck/transpile separately |
+| **Runtime Dependencies** | Native libraries / OS | Native libraries / OS | JVM or native-image build | .NET runtime or Native AOT | Native libraries / OS | Target dependent | Interpreter / dependencies | JS engine / host APIs; TS is erased |
+| **Cross-Platform** | Recompile for target | Recompile for target | JVM targets; Android differs | Cross-platform .NET targets | Recompile for target | Depends on target/runtime | Available on many platforms | Browser and server compatibility varies by API |
 
 ---
 
@@ -1578,37 +1582,38 @@ async function typedAsyncExample(): Promise<string[]> {
 
 ## Performance Characteristics
 
-### Runtime Performance (Relative)
+### Runtime Performance: No Universal Rankings
+
+The cells below are architectural considerations, **not measured benchmarks**. Identical algorithms can exhibit different results depending on compiler options, memory allocation, input sizes, JIT warmup, garbage-collector settings, platform, and native libraries. Compare actual application workloads rather than interpreting language labels as benchmark scores.
 
 | Language | Raw Performance | Memory Usage | Startup Time | Development Speed |
 |----------|----------------|--------------|--------------|------------------|
-| **C** | Highest | Lowest | Instant | Slow |
-| **C++** | Highest | Low | Instant | Slow |
-| **Rust** | Highest | Low | Instant | Medium |
-| **Java** | High (after JIT warmup) | Medium-High | Slow (JVM startup) | Fast |
-| **C#** | High (after JIT warmup) | Medium-High | Medium | Fast |
-| **Kotlin** | High (JVM) / Medium (Native) | Medium-High | Slow (JVM) | Fast |
-| **Python** | Low | Medium | Fast | Very Fast |
-| **JS/TS** | Medium (V8 optimized) | Medium | Fast | Very Fast |
+| **C** | Workload-dependent native | Toolchain/allocator-dependent | Usually low, not guaranteed | Team/problem-dependent |
+| **C++** | Workload-dependent native | Ownership/allocator-dependent | Usually low, not guaranteed | Team/problem-dependent |
+| **Rust** | Workload-dependent native | Ownership/allocator-dependent | Usually low, not guaranteed | Team/problem-dependent |
+| **Java** | JIT/AOT; workload-dependent | JVM/GC-dependent | JVM and packaging dependent | Team/problem-dependent |
+| **C#** | JIT/AOT; workload-dependent | Runtime/GC-dependent | JIT vs Native AOT dependent | Team/problem-dependent |
+| **Kotlin** | JVM/Native/JS target dependent | Target/runtime dependent | Target/runtime dependent | Team/problem-dependent |
+| **Python** | Interpreter, native extensions and build dependent | Implementation dependent | Runtime/imports dependent | Team/problem-dependent |
+| **JS/TS** | JavaScript engine / WebAssembly dependent | Host/engine dependent | Host/bundle dependent | Team/problem-dependent |
 
 ### Memory Management Comparison
 
-**Manual (C, C++)**
-- Complete control over memory allocation and deallocation
-- Zero runtime overhead
+**Manual and RAII (C, C++)**
+- Control over allocation and deallocation; modern C++ often uses RAII and smart pointers
+- Runtime cost depends on allocation strategy and libraries, not the language label alone
 - High risk of memory leaks, double-frees, use-after-free bugs
 - Requires careful programming and extensive testing
 
-**Garbage Collection (Java, C#, Kotlin, Python, JS)**
-- Automatic memory management
-- Safe from memory corruption bugs
-- Periodic pause times for garbage collection
-- Higher memory overhead due to GC metadata
+**Managed memory (Java, C#, Kotlin, Python, JavaScript)**
+- Managed objects generally do not require direct manual deallocation; memory safety still has **native interop, implementation, and unsafe-code caveats**
+- GC strategies differ; Python's default CPython implementation primarily uses reference counting plus cyclic garbage collection
+- Pauses, latency and metadata overhead depend on runtime and collector settings, and may differ substantially
 
-**Ownership System (Rust)**
-- Compile-time memory safety guarantees
-- Zero runtime overhead
-- No garbage collection pauses
+**Ownership and borrowing (Rust)**
+- Safe Rust enforces ownership and borrowing rules at compile time; `unsafe` operations require separate review
+- No mandatory tracing GC, but allocation, reference counting and synchronization still have costs
+- No garbage collection pauses from a built-in tracing collector
 - Learning curve for ownership and borrowing concepts
 
 ## Quick Decision Matrix
@@ -1673,23 +1678,22 @@ async function typedAsyncExample(): Promise<string[]> {
 
 ### Language Evolution Directions
 
-**C (C23)**
-- Improved Unicode support
-- Better bounds checking
-- Standardized threading primitives
+**C (C11 through C23)**
+- C11 standardized optional threading facilities; availability remains implementation-dependent
+- C23 revises the core language and library. Avoid assuming language standards automatically introduce runtime bounds checking; C code still requires explicit memory-safety discipline
+- [C reference and version guides](https://en.cppreference.com/w/c)
 
-**C++ (C++26 and beyond)**
-- Modules becoming standard
-- Coroutines stabilization
-- Better compile-time computation
-- Networking library standardization
-- Memory safety improvements
+**C++ (C++20, C++23 and beyond)**
+- Modules and coroutines are already standardized in **C++20**; compiler/toolchain support varies
+- Continued work on compile-time programming, libraries, tooling and safety practices
+- Do not assume a networking library or guaranteed memory safety was standardized by C++26 without checking its final specification
+- [C++ modules reference](https://en.cppreference.com/w/cpp/language/modules)
 
-**Java (Project Loom, Panama, Amber)**
-- Virtual threads for lightweight concurrency
-- Foreign function interface improvements
-- Pattern matching enhancements
-- Value types (Project Valhalla)
+**Java (JDK 21+ and ongoing projects)**
+- Virtual threads became a standard feature in **JDK 21** (JEP 444), not merely a future possibility
+- Foreign-function and pattern-matching features have version-specific release milestones; always identify the minimum JDK
+- Value types under Project Valhalla remain a separate evolving area
+- [JEP 444: Virtual Threads](https://openjdk.org/jeps/444)
 
 **C# (.NET 8+)**
 - Native AOT compilation improvements
@@ -1697,27 +1701,39 @@ async function typedAsyncExample(): Promise<string[]> {
 - Cloud-native optimizations
 - Performance improvements
 
-**Rust (2024 Edition+)**
-- Async trait stabilization
-- Generic associated types
-- Const generics improvements
-- Better compile times and error messages
+**Rust (established milestones and ongoing work)**
+- Generic associated types stabilized in **Rust 1.65 (2022)**
+- `async fn` in traits stabilized in **Rust 1.75 (2023)**, with public-trait usability constraints
+- The 2024 Edition is a separate compatibility/idiom milestone, not the release that introduced those two features
+- Tooling, diagnostics and compile-time performance remain active work
+- [Rust 1.65 GAT announcement](https://blog.rust-lang.org/2022/11/03/Rust-1.65.0/) · [Rust 1.75 async traits announcement](https://blog.rust-lang.org/2023/12/21/async-fn-rpit-in-traits/)
 
 **Kotlin**
 - Kotlin Multiplatform Mobile stability
 - Compose Multiplatform expansion
 - Performance improvements in Kotlin/Native
 
-**Python (3.12+)**
-- Performance improvements with specialized interpreter
-- Better error messages and debugging
-- Structural pattern matching enhancements
+**Python (3.10+ and optional free-threaded CPython)**
+- Structural pattern matching (`match`/`case`) was introduced in **Python 3.10**; it is not a newly introduced 3.12 feature
+- CPython 3.13 introduced experimental optional free-threaded builds; **Python 3.14 supports the optional free-threaded configuration**, which is not the default build
+- Standard CPython builds generally have a GIL; I/O threads can overlap, but CPU parallelism depends on build, implementation and work type
+- [Python 3.14 free-threading documentation](https://docs.python.org/3.14/howto/free-threading-python.html) · [PEP 779](https://peps.python.org/pep-0779/)
 
-**JavaScript/TypeScript**
-- ES2024+ features (decorators, pattern matching)
-- WebAssembly integration improvements
-- Better tree-shaking and bundling
-- TypeScript performance optimizations
+**JavaScript / TypeScript (standards versus proposals)**
+- **ECMAScript 2024** standardized `Promise.withResolvers`, `Object.groupBy`, `Map.groupBy`, resizable ArrayBuffers and other features; [official ES2024 spec](https://tc39.es/ecma262/2024/)
+- **ECMAScript 2025** added iterator helpers, new Set methods, `RegExp.escape`, `Promise.try` and other features; [official ES2025 spec](https://tc39.es/ecma262/2025/)
+- **ECMAScript 2026** added `Array.fromAsync`, `Math.sumPrecise`, `JSON.rawJSON` and other features; [official ES2026 spec](https://tc39.es/ecma262/2026/)
+- **Decorators and pattern matching are TC39 proposals**, not ES2024 features. TypeScript/transpilers may support similar syntax, but proposal stage and native JavaScript compatibility must be checked independently: [TC39 proposals](https://github.com/tc39/proposals)
+- **TypeScript's type annotations are erased** when compiling to JavaScript; static types do not provide runtime validation. [TypeScript handbook](https://www.typescriptlang.org/docs/handbook/typescript-from-scratch)
+- WebAssembly integration, bundling and TypeScript tooling continue to evolve independently of the ECMAScript edition
+
+## Standards and Versioned Primary References
+
+- [TC39 ECMAScript editions](https://tc39.es/ecma262/) and [TC39 active proposals](https://github.com/tc39/proposals): distinguish finalized language editions from features still under discussion. Check runtime support separately.
+- [TypeScript handbook on erased types](https://www.typescriptlang.org/docs/handbook/typescript-from-scratch): TS types are compile-time constructs, not runtime guards.
+- [C++ modules (since C++20)](https://en.cppreference.com/w/cpp/language/modules) and [Rust 1.65](https://blog.rust-lang.org/2022/11/03/Rust-1.65.0/) / [Rust 1.75](https://blog.rust-lang.org/2023/12/21/async-fn-rpit-in-traits/) release announcements.
+- [Python's free-threading guide](https://docs.python.org/3.14/howto/free-threading-python.html), [PEP 779](https://peps.python.org/pep-0779/) and [OpenJDK JEP 444](https://openjdk.org/jeps/444) for concurrency features.
+- [Executable ES2024 examples](examples/ecmascript-2024.mjs): run locally with Node.js 22+; the test suite checks this small, versioned slice of the guide, **not** code fragments in other languages.
 
 ## Footnotes
 

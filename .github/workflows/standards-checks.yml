@@ -1,0 +1,23 @@
+name: Language standards reference checks
+
+on:
+  push:
+    branches: [main]
+  pull_request:
+  workflow_dispatch:
+
+jobs:
+  ecmascript-2024:
+    name: ES2024 examples (Node ${{ matrix.node }})
+    runs-on: ubuntu-latest
+    strategy:
+      fail-fast: false
+      matrix:
+        node: ['22', '24']
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-node@v4
+        with:
+          node-version: ${{ matrix.node }}
+      - name: Run executable ES2024 examples and documentation regression tests
+        run: node --test examples/ecmascript-2024.mjs
