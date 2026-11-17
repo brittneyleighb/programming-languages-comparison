@@ -2,7 +2,19 @@
 
 > A comprehensive, side-by-side comparison of **C**, **C++**, **Java**, **C#**, **Rust**, **Kotlin**, **Python**, and **JavaScript/TypeScript** 
 
-## [Click here for the guide](guide.md)
+## [Read the comparison guide](guide.md)
+
+**Version status:** The original guide was written in September 2025. A targeted review on **November 16, 2026** corrected version-sensitive claims about ECMAScript, C++, Rust, Python, Java, compilation, memory models, and performance. The guide is still a broad survey, **not** a fully verified or benchmarked reference for every language. Feature availability also depends on toolchain and runtime versions.
+
+**Run a verified example:** Node.js 22+ is enough to execute [the ES2024 standards checks](examples/ecmascript-2024.mjs) without installing dependencies:
+
+```bash
+node --test examples/ecmascript-2024.mjs
+```
+
+The tests exercise standardized `Object.groupBy`, `Map.groupBy`, and `Promise.withResolvers` behavior and guard against the most misleading stale comparisons. Other snippets in [guide.md](guide.md) are **illustrative fragments**; some need imports, an enclosing function/class, packages, or project setup and are not all independently executable.
+
+For JavaScript's proposal status use the [TC39 proposals tracker](https://github.com/tc39/proposals), and for final language features use the [versioned ECMAScript specifications](https://tc39.es/ecma262/). TypeScript annotations are erased and do not validate runtime input.
 
 Language comparison with analogies/metaphors:
 
@@ -19,7 +31,7 @@ Language comparison with analogies/metaphors:
 
 ## Setup Instructions
 
-To run the code examples in this guide:
+These commands illustrate typical compiler/runtime setup for **standalone projects**, not a promise that every fragment in the guide compiles when pasted verbatim. Verify your OS-specific installation commands against each language's official site before running downloaded installers:
 
 ### C
 ```bash
