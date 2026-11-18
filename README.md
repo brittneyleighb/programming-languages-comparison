@@ -2,6 +2,10 @@
 
 > A comprehensive, side-by-side comparison of **C**, **C++**, **Java**, **C#**, **Rust**, **Kotlin**, **Python**, and **JavaScript/TypeScript** 
 
+## How to compare languages without starting a holy war
+
+A language is a bundle of tradeoffs: how it represents data, manages memory, reports mistakes, and fits a particular ecosystem. Begin with the software’s constraints, then compare languages on control and performance, safety and type system, deployment environment, and long-term maintainability.
+
 ## [Read the comparison guide](guide.md)
 
 **Version status:** The original guide was written in September 2025. A targeted review on **November 16, 2026** corrected version-sensitive claims about ECMAScript, C++, Rust, Python, Java, compilation, memory models, and performance. The guide is still a broad survey, **not** a fully verified or benchmarked reference for every language. Feature availability also depends on toolchain and runtime versions.
